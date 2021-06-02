@@ -10,7 +10,7 @@ cmake_minimum_required(VERSION 3.12)
 # Set project name, version and laguages here. (change as needed)
 # Version numbers are available by including "exampleConfig.h" in 
 # the source. See exampleConfig.h.in for some more details.
-project(CPP_BOILERPLATE VERSION 1.2.3.4 LANGUAGES CXX)
+project(Rotations VERSION 2.0.0.0 LANGUAGES CXX)
 
 
 # Options: Things you can set via commandline options to cmake (e.g. -DENABLE_LTO=[ON|OFF])
@@ -37,47 +37,80 @@ find_lto(CXX)
 # --------------------------------------------------------------------------------
 #                         Locate files (change as needed).
 # --------------------------------------------------------------------------------
-set(SOURCES          # All .cpp files in src/
-    src/example.cpp
-    src/lacze_do_gnuplota.cpp
-)
-set(TESTFILES        # All .cpp files in tests/
-    tests/main.cpp
-    tests/dummy.cpp
-)
-set(LIBRARY_NAME program)  # Default name for the library built from src/*.cpp (change if you wish)
+# file(GLOB SOURCES ./src/*.cpp) # All .cpp files in src/
+set(SOURCES ./src/Vectors.cpp 
+            ./src/Matrixes.cpp
+            ./src/Object.cpp
+            
+            ./src/GnuPlotApi.cpp
+            ./src/Scene.cpp
 
+            ./src/Menu.cpp 
+            
+)
+
+file(GLOB TEST_FILES ./tests/*.ut.cpp)       # All .cpp files in tests/
+
+add_library(SOURCES_LIB ${SOURCES})
 # --------------------------------------------------------------------------------
 #                            Build! (Change as needed)
 # --------------------------------------------------------------------------------
-# Compile all sources into a library.
-add_library(${LIBRARY_NAME} OBJECT ${SOURCES})
 
-# Lib needs its header files, and users of the library must also see these (PUBLIC). (No change needed)
-target_include_directories(${LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/inc)
-
-# There's also (probably) doctests within the library, so we need to see this as well.
-target_link_libraries(${LIBRARY_NAME} PUBLIC doctest)
 
 # Set the compile options you want (change as needed).
-target_set_warnings(${LIBRARY_NAME} ENABLE ALL AS_ERROR ALL DISABLE Annoying)
-# target_compile_options(${LIBRARY_NAME} ... )  # For setting manually.
+target_set_warnings(SOURCES_LIB ENABLE ALL AS_ERROR ALL DISABLE Annoying)
+target_include_directories(SOURCES_LIB PRIVATE ./inc ./prn)
+
 
 # Add an executable for the file app/main.cpp.
 # If you add more executables, copy these lines accordingly.
 add_executable(main app/main.cpp)   # Name of exec. and location of file.
-target_link_libraries(main PRIVATE ${LIBRARY_NAME})  # Link the executable to library (if it uses it).
+
+target_include_directories(main PRIVATE ./inc ./prn)
+target_include_directories (main PRIVATE ./)
+target_link_libraries(main PUBLIC SOURCES_LIB)
+
 target_set_warnings(main ENABLE ALL AS_ERROR ALL DISABLE Annoying) # Set warnings (if needed).
 target_enable_lto(main optimized)  # enable link-time-optimization if available for non-debug configurations
 
 # Set the properties you require, e.g. what C++ standard to use. Here applied to library and main (change as needed).
 set_target_properties(
-    ${LIBRARY_NAME} main 
-      PROPERTIES 
-        CXX_STANDARD 17 
-        CXX_STANDARD_REQUIRED YES 
-        CXX_EXTENSIONS NO
+    ${SOURCES_LIB} main 
+    PROPERTIES 
+    CXX_STANDARD 17 
+    CXX_STANDARD_REQUIRED YES 
+    CXX_EXTENSIONS NO
+    WORKING_DIRECTORY 	CMAKE_HOME_DIRECTORY
 )
 
 # Set up tests (see tests/CMakeLists.txt).
-add_subdirectory(tests)
+add_subdirectory(./tests)
+
+
+#  -------------------------------------------------------------------------- #
+#                                   Soft Body                                 #
+#  -------------------------------------------------------------------------- #
+# Add an executable for the file app/main.cpp.
+# If you add more executables, copy these lines accordingly.
+add_executable(softBody app/softBody.cpp)   # Name of exec. and location of file.
+
+target_include_directories(softBody PRIVATE ./inc ./prn)
+target_link_libraries(softBody PUBLIC SOURCES_LIB)
+
+target_set_warnings(main ENABLE ALL AS_ERROR ALL DISABLE Annoying) # Set warnings (if needed).
+target_enable_lto(main optimized)  # enable link-time-optimization if available for non-debug configurations
+
+# Set the properties you require, e.g. what C++ standard to use. Here applied to library and main (change as needed).
+set_target_properties(
+    SOURCES_LIB softBody 
+    PROPERTIES 
+    CXX_STANDARD 17 
+    CXX_STANDARD_REQUIRED YES 
+    CXX_EXTENSIONS NO
+    WORKING_DIRECTORY  ${PROJECT_SOURCE_DIR}
+)
+
+# verbose full described tests (make fulltest)
+add_custom_target(app
+   main
+    WORKING_DIRECTORY  ${PROJECT_SOURCE_DIR})
