@@ -41,5 +41,5 @@ add_custom_target(fulltest
     WORKING_DIRECTORY  ${PROJECT_SOURCE_DIR})
 
 add_custom_target(fulltestDisplay
-    ${TEST_MAIN} -x
+    ${TEST_MAIN} -s -x
     WORKING_DIRECTORY  ${PROJECT_SOURCE_DIR})

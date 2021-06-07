@@ -33,9 +33,9 @@ MatrixTransform::MatrixTransform(){
 }
 
 MatrixTransform::MatrixTransform(const Vector3 &translate, const Vector3 &angles, const Vector3 &scale){
-    auto a = angles[0];
-    auto b = angles[1];
-    auto c = angles[2];
+    double a = angles[2] * M_PI / 180; // Yaw
+    double b = angles[1] * M_PI / 180; // Pitch
+    double c = angles[0] * M_PI / 180; // Roll
     this->vector = {{   cos(a)*cos(b)*scale[0]  ,  cos(a)*sin(b)*sin(c)-sin(a)*cos(c)         ,   cos(a)*sin(b)*cos(c)+sin(a)*sin(c), translate[0]},
                     {   sin(a)*cos(b)           ,  sin(a)*sin(b)*sin(c)+cos(a)*cos(c)*scale[1],   sin(a)*sin(b)*cos(c)-cos(a)*sin(c), translate[1]},
                     {   -sin(b)                 ,  cos(b)*sin(c)                              ,   cos(b)*cos(c)*scale[2]            , translate[2]},                   

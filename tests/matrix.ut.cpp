@@ -135,8 +135,52 @@ TEST_CASE("12. Rotation test"){
     CHECK((Mz * Mx * v - VectorY)[2] <= MIN_DIFF);
 }
 
-TEST_CASE("TEST matrixt rot"){
-    MatrixRot M;
-    MatrixRot N(90, VectorX);
-    std::cout << M << std::endl << N << std::endl << N * M;
+// TEST_CASE("TEST matrixt rot"){
+//     MatrixRot M;
+//     MatrixRot N(90, VectorX);
+//     // std::cout << M << std::endl << N << std::endl << N * M;
+// }
+
+TEST_CASE("MatrixTransformation"){
+    MatrixTransform M({0, 0, 0}, {0, 0, 0}, {1, 1, 1});
+    CHECK(M[0][3] == 0);
+    CHECK(M[1][3] == 0);
+    CHECK(M[2][3] == 0);
+    CHECK(M[3][3] == 1);
+    Vector4 v = {1, 1, 1, 1};
+    Vector4 w = {1, 1, 1, 1};
+    CHECK(w == M * v);
+
+    MatrixTransform N({50, 60, 70}, {0, 0, 0}, {1, 1, 1});
+
+    CHECK(N[0][3] == 50);
+    CHECK(N[1][3] == 60);
+    CHECK(N[2][3] == 70);
+    CHECK(N[3][3] == 1);
+    Vector4 x = {51, 61, 71, 1};
+    CHECK(x == N * v);
+
+    MatrixTransform O({0, 0, 0}, {0, 0, 90}, {1, 1, 1});
+    Vector4 y = {-1, 1, 1, 1};
+    CHECK(y == O * v);
+
+    MatrixTransform P({119, 89, 49}, {0, 0, 90}, {1, 1, 1});
+    Vector4 z = {118, 90, 50, 1};
+
+    CHECK(z == P * v);
+
+    MatrixTransform R({0, 0, 0}, {0, 0, 0}, {0, 0, 0});
+    CHECK(R * v == Vector4({0, 0, 0, 1}));
+
+    MatrixTransform Q({0, 0, 0}, {0, 0, 0}, {2, 2, 2});
+    CHECK( Q*v == Vector4({2, 2, 2, 1}));
+
+
+    MatrixTransform S({0, 0, 0}, {0, 0, -90}, {1, 1, 1});
+
+
+    Vector4 a = {1, -1, 1, 1};
+
+
+    CHECK(a == S * v);
 }

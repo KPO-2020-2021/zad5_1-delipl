@@ -19,7 +19,8 @@ Scene::Scene(){
 }
 
 Scene::~Scene(){
-    system("rm ./tmp/*");
+    // system("pwd");
+    // system("rm ./tmp/*");
     system("killall gnuplot");
     this->activeObjects.clear();
 }

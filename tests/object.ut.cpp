@@ -8,7 +8,7 @@ TEST_CASE("1. Transform constructor"){
     Transform trans;
     CHECK(trans.position == Vector3());
     CHECK(trans.rotation == MatrixRot());
-    CHECK(trans.pinned == nullptr);
+    // CHECK(trans.pinned == nullptr);
     CHECK(trans.scale == Vector3({1, 1, 1}));
 }
 TEST_CASE("2. Object constriuctor, open file and read data"){
@@ -37,10 +37,23 @@ TEST_CASE("2. Object constriuctor, open file and read data"){
 TEST_CASE("4. Object 8 actualPoints rotate"){
     CHECK_NOTHROW(Object rect("prostopadloscian.dat"));
     Object rect("prostokat.dat");
+    rect.Rotate(0, VectorZ);
+    rect.Update();
+    CHECK(rect[0] == Vector3({60, 60, 60}));
 
     rect.Rotate(90, VectorZ);
     rect.Update();
     CHECK(rect[0] == Vector3({-60, 60, 60}));
+
+    rect.Rotate(-90, VectorZ);
+    rect.Update();
+    CHECK(rect[0] == Vector3({60, 60, 60}));
+
+    
+
+    rect.Rotate(-90, VectorZ);
+    rect.Update();
+    CHECK(rect[0] == Vector3({60, -60, 60}));
 
     Object rect1("line.dat");
     rect1.Rotate(90, VectorX);
@@ -53,7 +66,7 @@ TEST_CASE("4. Object 8 actualPoints rotate"){
 
     rect1.Rotate(-90, VectorX);
     rect1.Update();
-    CHECK(rect1[0] == Vector3({0, -100, 0}));
+    CHECK(rect1[0] == Vector3({0, 0, -100}));
 
 
     Object line("line.dat");
@@ -61,26 +74,15 @@ TEST_CASE("4. Object 8 actualPoints rotate"){
     line.Update();
     CHECK(line[0] == Vector3({100, 0, 0}));
 
-    line.Rotate((90, VectorY);
+    line.Rotate(90, VectorY);
     line.Update();
     CHECK(line[0] == Vector3({0, 0, -100}));
 
-    line.Rotate((90, VectorX);
+    line.Rotate(90, VectorX);
     line.Update();
-    CHECK(line[0] == Vector3({0, -100, 0}));
+    CHECK(line[0] == Vector3({0, 0, -100}));
 }
 
-TEST_CASE("9. Rotate by rotation"){
-    Object* rect;
-    Object obj("line.dat");
-    rect = &obj;
-
-    rect->rotation = MatrixRot(90, VectorX) * rect->rotation;
-    rect->position += {-100, 0, 0};
-
-    rect->Update();
-    CHECK((*rect)[0] == Vector3({0, 0, 0}));
-}
 
 TEST_CASE("10. Object ID"){
     CHECK(Object::HowManyObjects() == 0);
@@ -97,17 +99,17 @@ TEST_CASE("10. Object ID"){
     CHECK(rect4.SeflID() == 3);
     CHECK(Object::HowManyObjects() == 4);
 }
-TEST_CASE("11.Object Read and write file"){
-    Object obj("line.dat");
-    Object obj1("line.dat");
-    std::ifstream tmpFile(std::string(TMP_FOLDER + obj.Name()));
+// TEST_CASE("11.Object Read and write file"){
+//     Object obj("line.dat");
+//     Object obj1("line.dat");
+//     std::ifstream tmpFile(std::string(TMP_FOLDER + obj.Name()));
 
 
-    tmpFile >> obj1;
+//     tmpFile >> obj1;
 
-    for (std::size_t i = 0; i < obj.CountPoints(); ++i)
-        CHECK(obj1[i] == obj[i]);
-}
+//     for (std::size_t i = 0; i < obj.CountPoints(); ++i)
+//         CHECK(obj1[i] == obj[i]);
+// }
 
 TEST_CASE("Object scale test"){
     Object obj("line.dat", {0, 0, 0}, {1, 1, 1});

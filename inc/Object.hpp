@@ -1,9 +1,11 @@
 #ifndef __OBJECT_HPP__
 #define __OBJECT_HPP__
-#include "Matrixes.hpp"
 #include <iostream>
+#include <memory>
 #include <string>
 #include <vector>
+
+#include "Matrixes.hpp"
 /**
  * @file
  * Describes Transform Class and Object Class
@@ -17,7 +19,7 @@ struct Transform{
         /**
          * @brief Pinned Transform
          */
-        Transform *pinned;
+        std::shared_ptr<Transform> pinned;
 
         /**
          * @brief Center position

@@ -11,10 +11,10 @@ Build commands
 git clone https://github.com/KPO-2020-2021/zad5_1-delipl.git # Cloning repository
 cd zad5_1-delipl
 
-mkdir lib
-mkdir lib/doctest
-git submodule init lib/doctest
-git submodule update
+mkdir lib/  # Download doctest lib
+cd lib
+git submodule add https://github.com/onqtam/doctest.git
+cd ../
 
 mkdir build tmp && cd build
 cmake ..           # options: -DCMAKE_BUILD_TYPE=[Debug | Coverage | Release], Debug is default
