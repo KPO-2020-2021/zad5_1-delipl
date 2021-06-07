@@ -149,7 +149,7 @@ T Vector<T, dim>::operator&(const Vector &v) const{
 template <typename T, std::size_t dim>
 std::ostream &operator<<(std::ostream &strm, const Vector<T, dim> &v) {
     for (std::size_t i = 0; i < dim; ++i)
-        strm << std::setw(26) << std::fixed << std::setprecision(10) << v[i];
+        strm << std::setw(16) << std::fixed << std::setprecision(10) << v[i];
     return strm;
 }
 

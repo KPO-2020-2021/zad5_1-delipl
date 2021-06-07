@@ -39,7 +39,7 @@ struct Transform{
         /**
          * @brief Scale as a unit matrix
          */
-        Vector3 scale;
+        MatrixRot scale;
 
         /**
          * @brief Construct a new Transform object
@@ -48,7 +48,7 @@ struct Transform{
             this->pinned = nullptr;
             this->position    = Vector3();
             this->rotation    = MatrixRot();
-            this->scale       = Vector3({1, 1, 1});
+            this->scale       = MatrixRot();
             this->eulerAngles = Vector3();
         }
 };

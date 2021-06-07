@@ -34,9 +34,9 @@ int main() {
 
     scene.AddObject(Object("surface.dat", {-100, -100, 0}));
 
-    for (double i = -80; i < 80; i+=20)
+    for (double i = -80; i < 80; i += 20)
         for (double j = -80; j < 80; j += 20)
-        scene.AddObject(Object("prism.dat", {j, i, 0}, {20, 20, 20}));
+            scene.AddObject(Object("prism.dat", {j, i, 0}, {20, 20, 20}));
 
     Object *selectedObj = nullptr;
 
@@ -47,13 +47,19 @@ int main() {
     /* -------------------------------------------------------------------------- */
     bool finish = false;
     std::vector<MatrixRot> rotationSequece;
-    Menu menu({{"Selected object: ",
+    Menu menu({{"Print informations about selected object: ",
                 [&selectedObj]() mutable {
                     if (selectedObj == nullptr)
                         throw std::logic_error("Did not choosed the active object.");
 
                     std::cout
                         << selectedObj->SeflID() << " " << selectedObj->Name() << std::endl;
+                    std::cout << "position: \n"
+                              << selectedObj->position
+                              << "\neuler angles: \n"
+                              << selectedObj->eulerAngles
+                              << "\nrotation Matrix: \n"
+                              << selectedObj->rotation;
                 }},
                {"Choose Figure to work with (index)",
                 [&selectedObj, &scene]() {
@@ -103,16 +109,19 @@ int main() {
                                 case 'x':
                                     rotationSequece.push_back(
                                         MatrixRot(angle, VectorX));
+                                    selectedObj->eulerAngles[0] += angle;
                                     break;
                                 case 'Y':
                                 case 'y':
                                     rotationSequece.push_back(
                                         MatrixRot(angle, VectorY));
+                                    selectedObj->eulerAngles[1] += angle;
                                     break;
                                 case 'Z':
                                 case 'z':
                                     rotationSequece.push_back(
                                         MatrixRot(angle, VectorZ));
+                                    selectedObj->eulerAngles[2] += angle;
                                     break;
                                 default:
                                     throw std::logic_error("Wrong axis");

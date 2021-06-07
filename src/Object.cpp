@@ -6,7 +6,9 @@ Object::Object(const std::string name, const Vector3 &centerPosition,
                const Vector3 &scale)
     : Transform(), id{Object::HMO} {
     this->lenPointsPack = 0;
-    this->scale = scale;
+    this->scale[0][0] =  scale[0];
+    this->scale[1][1] =  scale[1];
+    this->scale[2][2] =  scale[2];
 
     std::ifstream readFile(DATA_FOLDER + name);
     if(readFile.good())
@@ -84,14 +86,11 @@ std::vector<Vector3> Object::OriginPoints() const{
 
 void Object::Update(){
     this->actualPoints = this->originPoints;
-    MatrixTransform M(this->position, this->eulerAngles, this->scale);
 
-    for (auto &x : this->actualPoints){
-        Vector4 y({x[0], x[1], x[2], 1});
-        y = M * y;
-        x = Vector3({y[0], y[1], y[2]});
+    for (auto &x : this->actualPoints) {
+        x = this->scale * this->rotation * x;
+        x += this->position;
     }
-
     this->Save();
 }
 
