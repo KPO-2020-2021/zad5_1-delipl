@@ -41,11 +41,14 @@ find_lto(CXX)
 set(SOURCES ./src/Vectors.cpp 
             ./src/Matrixes.cpp
             ./src/Object.cpp
+            ./src/SceneObject.cpp
             
             ./src/GnuPlotApi.cpp
             ./src/Scene.cpp
 
             ./src/Menu.cpp 
+
+        
             
 )
 

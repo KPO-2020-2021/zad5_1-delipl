@@ -54,12 +54,12 @@ int main() {
 
                     std::cout
                         << selectedObj->SeflID() << " " << selectedObj->Name() << std::endl;
-                    std::cout << "position: \n"
-                              << selectedObj->position
+                    std::cout << "localPosition: \n"
+                              << selectedObj->localPosition
                               << "\neuler angles: \n"
                               << selectedObj->eulerAngles
                               << "\nrotation Matrix: \n"
-                              << selectedObj->rotation;
+                              << selectedObj->localRotation;
                 }},
                {"Choose Figure to work with (index)",
                 [&selectedObj, &scene]() {
@@ -96,7 +96,7 @@ int main() {
 
                                 for (std::size_t i = 0; i < times; ++i)
                                     for (auto &rot : rotationSequece)
-                                        selectedObj->rotation = rot * selectedObj->rotation;
+                                        selectedObj->localRotation = rot * selectedObj->localRotation;
 
                                 return;
                             }
@@ -139,20 +139,20 @@ int main() {
                         throw std::logic_error("Did not choosed the active object.");
 
                     for (std::size_t i = 0; i < times; ++i)
-                        for (auto &rot : rotationSequece) selectedObj->rotation = rot * selectedObj->rotation;
+                        for (auto &rot : rotationSequece) selectedObj->localRotation = rot * selectedObj->localRotation;
                 }},
                {"Print rotaion Matrix",
                 [&selectedObj]() { 
                     if (selectedObj == nullptr)
                         throw std::logic_error("Did not choosed the active object.");
-                    std::cout << selectedObj->rotation << std::endl; }},
+                    std::cout << selectedObj->localRotation << std::endl; }},
                {"Translate - vector x y z",
                 [&selectedObj]() {
                     if (selectedObj == nullptr)
                         throw std::logic_error("Did not choosed the active object.");
                     Vector3 x;
                     std::cin >> x;
-                    selectedObj->position += x;
+                    selectedObj->localPosition += x;
                 }},
                {"Print cords of Figure",
                 [&selectedObj]() {
@@ -233,7 +233,7 @@ int main() {
     /*                                  MAIN LOOP                                 */
     /* -------------------------------------------------------------------------- */
     while (!finish) {
-        scene.Update();
+        scene.UpdatePoints();
 
         std::cout << "=======================" << menu;
         try {

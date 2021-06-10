@@ -50,14 +50,14 @@ int main(int argc, char const *argv[])
 //              * 
 //              */
 
-//             if(ground.transform.position[0] > 100){
+//             if(ground.transform.localPosition[0] > 100){
             
                 
 //             }
 
 //         }
 //         catch(Draw){
-//             scene.Update();
+//             scene.UpdatePoints();
 //         }
 //     }
 
