@@ -31,9 +31,9 @@ Cuboid::Cuboid(const Vector3 &dimentions, const Vector3 &localPosition, Transfor
     dimentions{dimentions} {
 
     for (std::size_t i = 0; i < 5; ++i) {
-        this->centers.push_back(&(this->originPoints[i*4]));
-        this->vertexes.push_back(&(this->actualPoints[i*4+1]));
-        this->vertexes.push_back(&(this->actualPoints[i*4+2]));
+        this->centers.push_back(&(this->originPoints[i * 4]));
+        this->vertexes.push_back(&(this->originPoints[i * 4 + 1]));
+        this->vertexes.push_back(&(this->originPoints[i * 4 + 2]));
         this->centers.push_back(&(this->originPoints[i*4+3]));
 
     }

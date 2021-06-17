@@ -16,6 +16,10 @@ class Drone : public Cuboid {
 
     void TookOff(const double &height);
 
+    void Left(const double &angle);
+    
+    void Right(const double &angle);
+
     void ReconFlight();
 
     void Update() override;
