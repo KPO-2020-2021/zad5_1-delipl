@@ -1,11 +1,16 @@
+#ifndef __DRONE_HPP__
+#define __DRONE_HPP__
 #include "SceneObject.hpp"
 
-class Drone : public SceneObject {
-   private:
-    std::vector<Rotor> rotors;
+class Drone : public Cuboid {
+  private:
+    std::vector<std::shared_ptr<Rotor>> rotors;
+    std::vector<std::shared_ptr<Cuboid>> eyes;
 
-   public:
-    Drone(const Vector3 &position = Vector3(), const Vector3 &scale = Vector3({1, 1, 1}));
+  public:
+    Drone(const Vector3 &position = Vector3(), const Vector3 &scale = Vector3({2, 2, 1}));
+
+    ~Drone();
 
     void Forward(const double &lenght);
 
@@ -15,5 +20,8 @@ class Drone : public SceneObject {
 
     void Update() override;
 
-    void CanLand() override;
+    bool CanLand() override { return false; };
+
+    void Draw();
 };
+#endif 

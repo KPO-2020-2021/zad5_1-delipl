@@ -1,21 +1,22 @@
 #ifndef __VECTOR_HPP__
 #define __VECTOR_HPP__
 #include <initializer_list>
-#include <vector>
 #include <iostream>
+#include <vector>
 /**
  * @brief Dynamic any type Vector class.
  * @tparam T type of Vector
  * @tparam dim how many dimention is in the Vector
  */
 template <typename T, std::size_t dim>
-class Vector{
-protected:
+class Vector {
+  protected:
     /**
      * @brief Values of sent type.
     */
     std::vector<T> cord;
-public:
+
+  public:
     /**
      * @brief Construct a new empty Vector.
     */
@@ -128,7 +129,6 @@ public:
     T &operator&=(const Vector &v) const;
 };
 
-
 /**
  * @brief Output stream operator 
  * @return std::ostream& cout [x, y, ...]
@@ -147,4 +147,4 @@ std::istream &operator>>(std::istream &cin, Vector<T, dim> &v);
  * @brief include definitions.
 */
 #include "Vector.tpp"
-#endif // __VECTOR_HPP__
+#endif  // __VECTOR_HPP__

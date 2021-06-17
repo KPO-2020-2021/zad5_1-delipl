@@ -20,7 +20,7 @@ struct Transform {
     /**
          * @brief Pinned Transform
          */
-    const std::shared_ptr<Transform> pinnedTransform;
+    Transform * const pinnedTransform;
 
     /**
          * @brief Center local Position
@@ -55,17 +55,24 @@ struct Transform {
     /**
          * @brief Construct a new Transform object
          */
-    Transform(const std::shared_ptr<Transform> &pin = nullptr) :
+    Transform(Transform *const &pin = nullptr) :
         pinnedTransform{pin} {
         this->localPosition = Vector3();
         this->localRotation = MatrixRot();
         this->scale = MatrixRot();
         this->eulerAngles = Vector3();
     }
-    
 
-    
+//  Transform(const Transform &other):pinnedTransform{other.pinnedTransform},
+//     localPosition{other.localPosition},
+//     globalPosition{other.globalPosition},
+//     localRotation{other.localRotation},
+//     globalRotation{other.globalRotation},
+//     eulerAngles{other.eulerAngles},
+//     scale{other.scale}
+//     {}
 
+    virtual ~Transform() {}
     /**
          * @brief Translates every point from \a actualPoints and \a transform of Object
          * @param v translate Vector3
@@ -127,7 +134,7 @@ class Object : public Transform {
          * @param centerPosition center localPosition of object default {0, 0, 0}
          * @param scale scale of object default {1, 1, 1}
          */
-    Object(const std::string name, const Vector3 &centerPosition = Vector3(), const Vector3 &scale = {1, 1, 1}, const std::shared_ptr<Transform> &pin = nullptr);
+    Object(const std::string name, const Vector3 &centerPosition = Vector3(), const Vector3 &scale = {1, 1, 1}, Transform *const &pin = nullptr);
 
     /**
          * @brief Construct a new Object object

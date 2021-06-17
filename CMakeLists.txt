@@ -42,12 +42,12 @@ set(SOURCES ./src/Vectors.cpp
             ./src/Matrixes.cpp
             ./src/Object.cpp
             ./src/SceneObject.cpp
-            
+            ./src/Drone.cpp
+
             ./src/GnuPlotApi.cpp
             ./src/Scene.cpp
 
             ./src/Menu.cpp 
-
         
             
 )

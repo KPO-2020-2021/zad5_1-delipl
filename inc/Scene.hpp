@@ -1,56 +1,98 @@
-// #ifndef __SCENE_HPP__
-// #define __SCENE_HPP__
-// #include "config.hpp"
-// #include "Object.hpp"
-// #include "GnuPlotApi.hpp"
-// #include <vector>
-// /**
-//  * @file Describes Scene Class
-//  */
+/**
+ * @file Scene.hpp
+ * @author your name (you@domain.com)
+ * @brief Describes scene module
+ * @version 0.1
+ * @date 2021-06-15
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+#ifndef __SCENE_HPP__
+#define __SCENE_HPP__
+#include <vector>
 
-// /**
-//  * @brief class has Objects and can manipulate and display them on screen
-//  */
-// class Scene: public PzG::LaczeDoGNUPlota{
-//     /**
-//      * @brief std::vector of  objects on Scene
-//      */
-//     std::vector<Object> activeObjects;
+#include "Drone.hpp"
+#include "GnuPlotApi.hpp"
+#include "config.hpp"
+typedef PzG::LaczeDoGNUPlota GNUPlotApi;
+// class GNUPlotApi : public PzG::LaczeDoGNUPlota {
+//   public:
+//     GNUPlotApi() = default;
+//     void UsunNazwePliku(const std::string &name) {
+//          PzG::InfoPlikuDoRysowania toFind((std::string(TMP_FOLDER + name).c_str()),PzG::RodzajRysowania::RR_Ciagly,1);
+//           this->_InfoPlikow.remove(toFind);
+//     }
 
-//     public:
-//         /**
-//          * @brief Construct a new Scene object and creates new GnuPlot window
-//          */
-//         Scene();
-
-//         /**
-//          * @brief Destroy the Scene object and all objects on Scene and kilall Gnuplot
-//          */
-//         ~Scene();
-
-//         /**
-//          * @brief Links existing Object to Scene
-//          * @param obj Object
-//          */
-//         void AddObject(const Object &obj);
-
-//         /**
-//          * @brief Apply all moving functions to Objects
-//          */
-//         void Update();
-
-//         /**
-//          * @brief Access funtion to write objects
-//          * @param i index of object
-//          * @return Object
-//          */
-//         Object &operator[](const std::size_t &i);
-
-//         /**
-//          * @brief Access funtion to read objects
-//          * @param i index of object
-//          * @return Object
-//          */
-//         Object operator[](const std::size_t &i) const;
 // };
-// #endif // __SCENE_HPP__
+
+/**
+ * @brief class has Objects and can manipulate and display them on screen
+ */
+class Scene {
+    /**
+     * @brief std::vector of  objects on Scene
+     */
+    std::vector<Object> activeObjects;
+
+  public:
+    /**
+     * 
+     * @brief Api for GNUPlot to display and animate SceneObjects
+     */
+    inline static GNUPlotApi api = GNUPlotApi();
+
+    /**
+          *  
+      * @brief Draw SceneObject without saving into activeObjects
+      * @param obj SceneObject to draw.
+      */
+    inline static void Draw(SceneObject const *obj, const bool &show = true) {
+        api.DodajNazwePliku((std::string(TMP_FOLDER + obj->Name()).c_str()));
+        api.ZmienTrybRys(PzG::TR_3D);
+        if(show)
+          api.Rysuj();
+     //    api.UsunOstatniaNazwe();
+    }
+
+     inline static void Clear(){
+         api.UsunWszystkieNazwyPlikow();
+     }
+    /**
+         * @brief Construct a new Scene object and creates new GnuPlot window
+         */
+    Scene(){};
+
+    /**
+         * @brief Destroy the Scene object and all objects on Scene and kilall Gnuplot
+         */
+    ~Scene(){};
+
+    /**
+         * @brief Links existing Object to Scene
+         * @param obj Object
+         */
+    void Add(const Object &obj);
+
+    void Remove(const std::size_t &ID);
+
+    /**
+         * @brief Apply all moving functions to Objects
+         */
+    void Update();
+
+    /**
+         * @brief Access funtion to write objects
+         * @param i ID of SceneObject
+         * @return Object
+         */
+    std::shared_ptr<SceneObject> &operator[](const std::size_t &i);
+
+    /**
+         * @brief Access funtion to read objects
+         * @param i ID of SceneObject
+         * @return Object
+         */
+    std::shared_ptr<SceneObject> operator[](const std::size_t &i) const;
+};
+#endif  // __SCENE_HPP__

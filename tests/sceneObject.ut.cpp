@@ -10,7 +10,9 @@ TEST_CASE("1. Route constructor"){
 }
 TEST_CASE("2. Rotor constructor") {
     Vector3 localPosition({0, 0, 0});
-    CHECK_NOTHROW(Rotor rotor(localPosition, nullptr, SpinDirection_t::Clockwise));
+    CHECK_NOTHROW(Rotor rotor(SpinDirection_t::Clockwise, localPosition, {1, 1, 1}, nullptr));
+    Rotor rotor(SpinDirection_t::Clockwise, localPosition, {1,1,1}, nullptr);
+    CHECK_NOTHROW(Rotor x(SpinDirection_t::Clockwise, localPosition, {1, 1, 1}, &rotor));
 }
 
 TEST_CASE("3. Rotor pin and local and global positions"){
@@ -57,4 +59,11 @@ TEST_CASE("3. Rotor pin and local and global positions"){
     // CHECK(rotor2[3] == Vector3({0, 0, 80.5}));
 
 
+}
+
+TEST_CASE("4. Cuboid dims"){
+    Cuboid c({1, 1, 1});
+    CHECK(c.dimentions == Vector3{1, 1, 1});
+    Cuboid d({2, 2, 2});
+    CHECK(d.dimentions == Vector3{2, 2, 2});
 }

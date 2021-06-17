@@ -1,14 +1,28 @@
-// #include "Scene.hpp"
+#include "Scene.hpp"
 
-// #include <limits>
+#include <limits>
 
-// #include "doctest.h"
-// extern bool DISPLAY;
+#include "doctest.h"
+extern bool DISPLAY;
 
-// TEST_CASE("1. Scene constructor") {
-//     CHECK_NOTHROW(Scene scene);
-// }
+TEST_CASE("1. Scene constructor") {
+    CHECK_NOTHROW(Scene scene);
+}
 
+TEST_CASE("2. Draw without making scene"){
+    if (DISPLAY) {
+        Scene::Draw(new Rotor(SpinDirection_t::Clockwise));
+        std::cout << "Press Enter to continue..." << std::endl;
+        std::cin.ignore(std::numeric_limits<int>().max(), '\n');
+    }
+}
+TEST_CASE("3. Cuboid"){
+    if (DISPLAY) {
+        Scene::Draw(new Cuboid({6, 10 ,9}));
+        std::cout << "Press Enter to continue..." << std::endl;
+        std::cin.ignore(std::numeric_limits<int>().max(), '\n');
+    }
+}
 // TEST_CASE("2. Draw Rectangle") {
 //     Scene scene;
 //     Object rect("prostokat.dat");

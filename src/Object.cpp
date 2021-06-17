@@ -4,6 +4,10 @@
 #include <fstream>
 
 
+#ifndef TMP_FOLDER
+#define TMP_FOLDER "tmp/"
+#endif  // !1
+
 void Transform::Translate(const Vector3 &v) {
     this->localPosition += v;
 }
@@ -17,7 +21,7 @@ void Transform::Rotate(const double &angle, const Vector3 &v) {
 }
 
 Object::Object(const std::string name, const Vector3 &centerPosition,
-               const Vector3 &scale, const std::shared_ptr<Transform> &pin) :
+               const Vector3 &scale, Transform *const &pin) :
     Transform(pin), id{Object::HMO}, name{std::to_string(Object::HMO) + "_" + name} {
     this->lenPointsPack = 0;
     this->scale[0][0] = scale[0];
@@ -67,8 +71,7 @@ Object::Object(const std::string name, const Vector3 &centerPosition,
 //     ++Object::HMO;
 // }
 Object::~Object() {
-    this->actualPoints.clear();
-    this->originPoints.clear();
+    system((std::string("rm ") + std::string(TMP_FOLDER) + this->Name()).c_str());
     --Object::HMO;
 }
 
@@ -90,8 +93,6 @@ void Object::Save() {
         tmpFile << *this;
     tmpFile.close();
 }
-
-
 
 std::vector<Vector3> Object::OriginPoints() const {
     return this->originPoints;
