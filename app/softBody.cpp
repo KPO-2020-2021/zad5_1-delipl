@@ -1,6 +1,37 @@
-int main(int argc, char const *argv[])
-{
+bool DISPLAY = true;
+#include "Scene.hpp"
+#include <iostream>
+int main(int argc, char const *argv[]) {
     /* code */
+    Drone drone;
+    while (true) {
+        double x;
+        char y;
+        drone.Update();
+        Scene::Clear();
+        drone.Draw();
+        std::cin >> y >> x;
+        std::cout << "Rotate: " << x << " " << y << std::endl; 
+        switch (y)
+        {
+        case 'a':
+            drone.Left(x);
+            break;
+        case 'd':
+            drone.Right(x);
+            break;
+        case 'w':
+            drone.Forward(x);
+            break;
+        case 'c':
+            drone.TookOff(x);
+            break;
+
+        default:
+            break;
+        }
+        
+    }
     return 0;
 }
 
@@ -11,6 +42,7 @@ int main(int argc, char const *argv[])
 // #include "config.hpp"
 // #include "Menu.hpp"
 // #include "Scene.hpp"
+
 
 // void signalHandler( int signum ) {
 //     std::cout << "Interrupt signal (" << signum << ") received.\n";

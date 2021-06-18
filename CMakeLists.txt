@@ -106,11 +106,12 @@ target_enable_lto(main optimized)  # enable link-time-optimization if available 
 # Set the properties you require, e.g. what C++ standard to use. Here applied to library and main (change as needed).
 set_target_properties(
     SOURCES_LIB softBody 
+    WORKING_DIRECTORY  ${PROJECT_SOURCE_DIR}
     PROPERTIES 
     CXX_STANDARD 17 
     CXX_STANDARD_REQUIRED YES 
     CXX_EXTENSIONS NO
-    WORKING_DIRECTORY  ${PROJECT_SOURCE_DIR}
+    
 )
 
 # verbose full described tests (make fulltest)

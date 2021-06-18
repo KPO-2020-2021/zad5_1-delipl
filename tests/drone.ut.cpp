@@ -76,6 +76,26 @@ TEST_CASE("4. Drone forward and tookoff") {
         Scene::Clear();
     }
 }
+TEST_CASE("5. Drone rotate") {
+    Drone drone;
+    if (DISPLAY) {
+        drone.Draw();
+        std::cout << "Rotate Drone" << std::endl;
+        std::cout << "Press Enter to continue..." << std::endl;
+
+        std::cin.ignore(std::numeric_limits<int>().max(), '\n');
+        Scene::Clear();
+    }
+    drone.Left(90);
+    drone.Update();
+    if (DISPLAY) {
+        drone.Draw();
+
+        std::cout << "Press Enter to continue..." << std::endl;
+        std::cin.ignore(std::numeric_limits<int>().max(), '\n');
+        Scene::Clear();
+    }
+}
     // TEST_CASE("2. Drone forward"){
     //     Drone d;
     //     d.Forward(100);

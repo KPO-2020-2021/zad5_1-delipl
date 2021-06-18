@@ -1,6 +1,12 @@
 #include "config.hpp"
 #include "SceneObject.hpp"
+#include "Scene.hpp"
 #include "doctest.h"
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
 extern bool DISPLAY;
 
 TEST_CASE("1. Route constructor"){
@@ -16,6 +22,25 @@ TEST_CASE("2. Rotor constructor") {
 }
 
 TEST_CASE("3. Rotor pin and local and global positions"){
+    Cuboid cub({60, 30,10});
+    if (DISPLAY) {
+        std::cout << "Press Enter to rotate..." << std::endl;
+        std::cin.ignore(std::numeric_limits<int>().max(), '\n');
+        for (int i = 0; i < 100; ++i){
+            
+
+            cub.Rotate(2, VectorZ);
+            cub.UpdatePoints();
+            cub.Draw();
+            usleep(10000);
+            Scene::Clear();
+        }
+        std::cout << "Rotate cub" << std::endl;
+        std::cout << "Press Enter to continue..." << std::endl;
+
+        std::cin.ignore(std::numeric_limits<int>().max(), '\n');
+        Scene::Clear();
+    }
     // SceneObject drone("cuboid.dat", {0, 0, 50}, {0.2, 0.2, 0.2});
     // Rotor rotor({0, 0, 30}, std::make_shared<Transform>(drone), SpinDirection_t::Clockwise);
 

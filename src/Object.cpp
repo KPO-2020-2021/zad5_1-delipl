@@ -17,7 +17,7 @@ void Transform::Rotate(const double &angle, const Vector3 &v) {
         throw std::logic_error("Cannot rotate");
     this->eulerAngles += v * angle;
 
-    this->localRotation = MatrixRot(angle, v) * this->localRotation;
+    this->localRotation = this->localRotation * MatrixRot(angle, v);
 }
 
 Object::Object(const std::string name, const Vector3 &centerPosition,
@@ -36,7 +36,7 @@ Object::Object(const std::string name, const Vector3 &centerPosition,
         readFile >> *this;
     else {
         system("pwd");
-        throw std::logic_error("Cannot read object file! " + std::string(DATA_FOLDER) + name);
+        throw std::logic_error("Cannot read object file! " + std::string(DATA_FOLDER) + name );
     }
     readFile.close();
 
@@ -101,12 +101,8 @@ std::vector<Vector3> Object::OriginPoints() const {
 void Object::UpdatePoints() {
     this->actualPoints = this->originPoints;
 
-    this->globalPosition = this->localPosition + (this->pinnedTransform == nullptr ? Vector3() : this->pinnedTransform->globalPosition);
-    this->globalRotation = this->pinnedTransform == nullptr ? this->localRotation : this->localRotation * this->pinnedTransform->globalRotation;
-
     for (auto &point : this->actualPoints) {
-        point = this->scale * this->globalRotation * point;
-        point += this->globalPosition;
+        point = this->ConvertToPinned(point);
     }
 
     this->Save();

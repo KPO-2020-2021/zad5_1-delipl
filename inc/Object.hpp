@@ -28,19 +28,10 @@ struct Transform {
     Vector3 localPosition;
 
     /**
-         * @brief Center global position
-         */
-    Vector3 globalPosition;
-
-    /**
          * @brief Local Rotation Matrix
          */
     MatrixRot localRotation;
 
-    /**
-         * @brief Global Rotation Matrix
-         */
-    MatrixRot globalRotation;
 
     /**
          * @brief Euler angles in 3 axis
@@ -63,14 +54,19 @@ struct Transform {
         this->eulerAngles = Vector3();
     }
 
-//  Transform(const Transform &other):pinnedTransform{other.pinnedTransform},
-//     localPosition{other.localPosition},
-//     globalPosition{other.globalPosition},
-//     localRotation{other.localRotation},
-//     globalRotation{other.globalRotation},
-//     eulerAngles{other.eulerAngles},
-//     scale{other.scale}
-//     {}
+
+     Vector3 UpdatePoint(Vector3 &point){
+         return this->localRotation * this->scale * point + this->localPosition;
+     }
+
+     Vector3 ConvertToPinned(Vector3 &point) {
+         if (this->pinnedTransform != nullptr) {
+              point = this->UpdatePoint(point);
+              return this->pinnedTransform->ConvertToPinned(point);
+         }
+         return  this->UpdatePoint(point);
+     }
+
 
     virtual ~Transform() {}
     /**
