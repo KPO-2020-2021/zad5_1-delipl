@@ -23,18 +23,18 @@ TEST_CASE("3. Cuboid"){
         std::cin.ignore(std::numeric_limits<int>().max(), '\n');
     }
 }
-// TEST_CASE("2. Draw Rectangle") {
-//     Scene scene;
-//     Object rect("prostokat.dat");
+TEST_CASE("4. Draw by scene") {
+    Scene scene;
+    auto drone = std::make_shared<Drone>();
 
-//     CHECK_NOTHROW(scene.AddObject(rect));
+    CHECK_NOTHROW(scene.Add(drone));
 
-//     if (DISPLAY) {
-//         scene.Update();
-//         std::cout << "Press Enter to continue..." << std::endl;
-//         std::cin.ignore(std::numeric_limits<int>().max(), '\n');
-//     }
-// }
+    if (DISPLAY) {
+        scene.Update();
+        std::cout << "Press Enter to continue..." << std::endl;
+        std::cin.ignore(std::numeric_limits<int>().max(), '\n');
+    }
+}
 
 // // TEST_CASE("3 Pointners to objects") {
 // //     Scene scene;

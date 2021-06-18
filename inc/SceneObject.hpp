@@ -25,7 +25,7 @@ class SceneObject : public Object {
     std::vector<Vector3> shadowY;
     std::vector<Vector3> shadowZ;
 
-    SceneObject(const std::string name, const Vector3 &centerPosition,
+    SceneObject(const std::string name, const Vector3 &centerPosition = Vector3(),
                 const Vector3 &scale = {1, 1 ,1}, Transform *const pin= nullptr);
     virtual ~SceneObject(){};
 
@@ -140,4 +140,14 @@ class Rotor : public SceneObject {
     bool CanLand() override { return true; };
 };
 
+class Terrain : public SceneObject {
+  public:
+    Terrain() :
+        SceneObject("surface.dat", {-300, -300, 0}, {4, 4, 4}) {
+    }
+    void Update() override{};
+    bool CanLand() override { return true; };
+};
+
 #endif  // !SCENEOBJECT_HPP
+

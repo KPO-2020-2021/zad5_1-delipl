@@ -33,7 +33,7 @@ class Scene {
     /**
      * @brief std::vector of  objects on Scene
      */
-    std::vector<Object> activeObjects;
+    std::vector<std::shared_ptr<SceneObject>> activeObjects;
 
   public:
     /**
@@ -61,38 +61,38 @@ class Scene {
     /**
          * @brief Construct a new Scene object and creates new GnuPlot window
          */
-    Scene(){};
+     Scene();
 
-    /**
+     /**
          * @brief Destroy the Scene object and all objects on Scene and kilall Gnuplot
          */
-    ~Scene(){};
+     ~Scene();
 
-    /**
+     /**
          * @brief Links existing Object to Scene
          * @param obj Object
          */
-    void Add(const Object &obj);
+     void Add(const std::shared_ptr<SceneObject> &obj);
 
-    void Remove(const std::size_t &ID);
+     void Remove(const std::size_t &ID);
 
-    /**
+     /**
          * @brief Apply all moving functions to Objects
          */
-    void Update();
+     void Update();
 
-    /**
+     /**
          * @brief Access funtion to write objects
          * @param i ID of SceneObject
          * @return Object
          */
-    std::shared_ptr<SceneObject> &operator[](const std::size_t &i);
+     std::shared_ptr<SceneObject> &operator[](const std::size_t &i);
 
-    /**
+     /**
          * @brief Access funtion to read objects
          * @param i ID of SceneObject
          * @return Object
          */
-    std::shared_ptr<SceneObject> operator[](const std::size_t &i) const;
+     std::shared_ptr<SceneObject> operator[](const std::size_t &i) const;
 };
 #endif  // __SCENE_HPP__

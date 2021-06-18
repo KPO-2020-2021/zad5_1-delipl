@@ -1,51 +1,37 @@
-// #include "Scene.hpp"
+#include "Scene.hpp"
 
-// Scene::Scene(){
-//     this->UsunWszystkieNazwyPlikow();
-//     this->_Xmax =  10 * WINDOW_SCALE;
-//     this->_Xmin = -10 * WINDOW_SCALE;
-//     this->_Ymax =  10  * WINDOW_SCALE;
-//     this->_Ymin = -10  * WINDOW_SCALE;
-//     this->_Zmax =  10  * WINDOW_SCALE;
-//     this->_Zmin =  -10 * WINDOW_SCALE;
+Scene::Scene(){
+    api.ZmienTrybRys(PzG::TR_3D);
+    api.Inicjalizuj();
 
-//     // this->UstawSkaleXZ(10*WINDOW_SCALE, -10*WINDOW_SCALE);
-//     // this->UstawSkaleY(10*WINDOW_SCALE);
+}
 
-//     this->ZmienTrybRys(PzG::TR_3D);
-//     this->Inicjalizuj();
+Scene::~Scene(){
+    // system("pwd");
+    system("killall gnuplot");
+}
 
-//     this->activeObjects = std::vector<Object>();
-// }
+void Scene::Add(const std::shared_ptr<SceneObject> &obj) {
+    this->activeObjects.push_back(obj);
+    api.DodajNazwePliku(std::string(TMP_FOLDER + obj->Name()).c_str());
+}
 
-// Scene::~Scene(){
-//     // system("pwd");
-//     system("rm ./tmp/*");
-//     system("killall gnuplot");
-//     this->activeObjects.clear();
-// }
+std::shared_ptr<SceneObject> &Scene::operator[](const std::size_t &i) {
+    if(i >= this->activeObjects.size())
+        throw std::overflow_error("There is no more objects");
+    return this->activeObjects[i];
+}
 
-// void Scene::AddObject(const Object &obj){
-//     this->activeObjects.push_back(obj);
-//     this->DodajNazwePliku(std::string(TMP_FOLDER + obj.Name()).c_str());
-// }
+std::shared_ptr<SceneObject> Scene::operator[](const std::size_t &i) const {
+    if(i >= this->activeObjects.size())
+        throw std::overflow_error("There is no more objects");
+    return this->activeObjects[i];
+}
 
-// SceneObject &Scene::operator[](const std::size_t &i) {
-//     if(i >= this->activeObjects.size())
-//         throw std::overflow_error("There is no more objects");
-//     return this->activeObjects[i];
-// }
-
-// SceneObject Scene::operator[](const std::size_t &i) const{
-//     if(i >= this->activeObjects.size())
-//         throw std::overflow_error("There is no more objects");
-//     return this->activeObjects[i];
-// }
-        
-// void Scene::Update(){
-//     for(auto &obj : this->activeObjects){
-//         obj.UpdatePoints();
-//     }
-    
-//     this->Rysuj();
-// }
+void Scene::Update(){
+    for(auto &obj : this->activeObjects){
+        obj->Update();
+    }
+    if(this->activeObjects.size() != 0)
+        api.Rysuj();
+}
