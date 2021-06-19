@@ -13,6 +13,7 @@ TEST_CASE("1. Route constructor"){
     Vector3 start({0, 0, 0});
     Vector3 stop({10, 10, 0});
     CHECK_NOTHROW(Route route(start, stop, 50.0));
+    CHECK_NOTHROW(new  Route (start, stop, 50.0));
 }
 TEST_CASE("2. Rotor constructor") {
     Vector3 localPosition({0, 0, 0});

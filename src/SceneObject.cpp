@@ -13,17 +13,18 @@ void SceneObject::Draw() {
     Scene::Draw(this);
 }
 
-Route::Route(const Vector3 &startPoint, const Vector3 &finishPoint, const double &height) :
-    SceneObject("route.dat", Vector3(), Vector3({1, 1, 1}), nullptr),
+Route::Route(const Vector3 &startPoint, const Vector3 &finishPoint, const double &height, Transform *pin) :
+    SceneObject("route.dat", startPoint, Vector3({1, 1, 1}),  pin),
     startPoint{startPoint},
     finishPoint{finishPoint},
     height{height} {
-    this->originPoints[0] = this->startPoint;
-    this->originPoints[1] = this->startPoint + VectorZ * height;
-    this->originPoints[2] = this->finishPoint + VectorZ * height;
-    this->originPoints[3] = this->finishPoint;
+    this->originPoints[0] = Vector3();
+    this->originPoints[1] = VectorZ * height;
+    this->originPoints[2] = this->finishPoint *(-1) + VectorZ * height;
+    this->originPoints[3] = this->finishPoint * (-1);
 
     this->actualPoints = this->originPoints;
+    this->UpdatePoints();
 }
 
 Cuboid::Cuboid(const Vector3 &dimentions, const Vector3 &localPosition, Transform *const pin) :

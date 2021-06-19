@@ -35,3 +35,7 @@ void Scene::Update(){
     if(this->activeObjects.size() != 0)
         api.Rysuj();
 }
+
+std::size_t Scene::CountObjects() const{
+    return this->activeObjects.size();
+}

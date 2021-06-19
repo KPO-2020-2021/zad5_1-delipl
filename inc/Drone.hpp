@@ -7,6 +7,8 @@ class Drone : public Cuboid {
     std::vector<std::shared_ptr<Rotor>> rotors;
     std::vector<std::shared_ptr<Cuboid>> eyes;
 
+    Route *route;
+
   public:
     Drone(const Vector3 &position = Vector3(), const Vector3 &scale = Vector3({2, 2, 1}));
 
@@ -27,5 +29,9 @@ class Drone : public Cuboid {
     bool CanLand() override { return false; };
 
     void Draw();
+
+    void FlyTo(const Vector3 &position, const double &height = 100);
+
+    void MakeRoute(const Vector3 &startPosition, const Vector3 landPosition, const double &height);
 };
 #endif 

@@ -55,19 +55,50 @@ int main() {
                               << drone->localRotation;
                 }},
                {"Add Drone: ",
-                [ &scene]() {
+                [&scene]() {
                     std::cout << "Where spawn drone Vector3: \n";
                     Vector3 pos;
                     std::cin >> pos;
                     std::shared_ptr<Drone> tmp = std::make_shared<Drone>(pos);
                     scene.Add(std::move(tmp));
                 }},
+               {"Choose active drone: ", [&drone, &scene]() {
+                    std::cout << "There are " << scene.CountObjects() << " on scene. Type number. 1 - n" << std::endl;
+                    std::size_t k =1;
+                    std::size_t n = 0;
+                    std::cin >> k;
+                    for (std::size_t i = 0; i < scene.CountObjects(); ++i){
+                        auto localPtr = std::dynamic_pointer_cast<Drone>(scene[i]);
+                        if (localPtr != nullptr) {
+                            ++n;
+                            if(n == k){
+                                drone = localPtr;
+                            }
+                        }
+                    }
+                }},
+               {"Fly to position", [&drone]() {
+                    if (drone == nullptr)
+                        throw std::logic_error("Did not choosed the active object.");
+                    std::cout << "Type finish position and height of flight." << std::endl;
+                    Vector3 pos;
+                    double height;
+                    std::cin >> pos >> height;
+                    drone->MakeRoute(drone->localPosition, pos, height);
+                    drone->FlyTo(pos, height);
+                    
+                }},
 
                {"Exit", [&finish]() { finish = true; }}});
+
+    std::shared_ptr<Drone> tmp = std::make_shared<Drone>();
+    scene.Add(std::move(tmp));
+    drone = std::dynamic_pointer_cast<Drone>(scene[1]);
 
     /* -------------------------------------------------------------------------- */
     /*                                  MAIN LOOP                                 */
     /* -------------------------------------------------------------------------- */
+
     while (!finish) {
         scene.Update();
 

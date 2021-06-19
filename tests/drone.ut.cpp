@@ -10,6 +10,28 @@
 #endif
 
 extern bool DISPLAY;
+TEST_CASE("6. Drow route"){
+    Drone drone;
+    if (DISPLAY) {
+        std::cout <<std::endl << "Draw drone route put vector..." << std::endl;
+        drone.Update();
+        Vector3 x;
+        std::cin >> x;
+        Vector3 moving = x - drone.localPosition;
+        std::cout << moving << std::endl;
+        double angle = (VectorX & moving) / moving.Length();
+        // Vector3
+        angle = drone.eulerAngles[0] - angle;
+        std::cout << angle <<
+            std::endl;
+        drone.Left(angle);
+        drone.Update();
+        std::cout << "Press Enter to continue..." << std::endl;
+        std::cin.ignore(std::numeric_limits<int>().max(), '\n');
+        Scene::Clear();
+    }
+}
+
 TEST_CASE("1. Drone Constructor") {
     CHECK_NOTHROW(Drone());
 }

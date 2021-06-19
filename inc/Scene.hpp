@@ -81,6 +81,8 @@ class Scene {
          */
      void Update();
 
+     std::size_t CountObjects() const;
+
      /**
          * @brief Access funtion to write objects
          * @param i ID of SceneObject

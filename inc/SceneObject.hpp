@@ -70,7 +70,7 @@ class Route : public SceneObject {
      * @param finishPoint landing localPosition
      * @param height height of flight
      */
-    Route(const Vector3 &startPoint, const Vector3 &finishPoint, const double &height);
+    Route(const Vector3 &startPoint, const Vector3 &finishPoint, const double &height, Transform *pin = (Transform *)nullptr);
 
     // ~Route();
 
