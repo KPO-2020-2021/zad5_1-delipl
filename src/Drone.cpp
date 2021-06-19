@@ -4,6 +4,7 @@
 extern bool DISPLAY;
 Drone::Drone(const Vector3 &position, const Vector3 &scale) :
     Cuboid(scale, position, nullptr) {
+    this->eulerAngles[2] = 90;
     Vector3 rotorScale = scale * 10;
     this->route = nullptr;
     auto
@@ -15,22 +16,25 @@ Drone::Drone(const Vector3 &position, const Vector3 &scale) :
     this->rotors.push_back(std::move(tmpPtr));
     tmpPtr = std::shared_ptr<Rotor>(new Rotor(SpinDirection_t::CounterClockwise, (*(this->vertexes[7])) + VectorZ * this->dimentions[2], rotorScale, this));
     this->rotors.push_back(std::move(tmpPtr));
-
-    // this->rotors.push_back(Rotor(Vector3({30, -20, 0}),  this, SpinDirection_t::CounterClockwise));
-    // this->rotors.push_back(Rotor(Vector3({-30, -20, 0}), this, SpinDirection_t::Clockwise));
-    // this->rotors.push_back(Rotor(Vector3({-30, 20, 0}),  this, SpinDirection_t::CounterClockwise));
 }
 
 Drone::~Drone() {}
 
 void Drone::Forward(const double &length) {
-    this->Translate(this->localRotation * Vector3({1,1,1}) * length);
+    auto moving = Vector3({cos(this->eulerAngles[2] * M_PI / 180), sin(this->eulerAngles[2] * M_PI / 180), 0});
+    this->animation.SetTranslateGoal(moving*length);
 }
 void Drone::TookOff(const double &length) {
-    this->Translate(VectorZ * length);
+    this->animation.SetTranslateGoal(VectorZ * length);
 }
 
 void Drone::Update() {
+    if (this->eulerAngles[2] != this->animation.goalRotation) {
+        this->Rotate(this->animation.rotateStep, VectorZ);
+    }
+    else if(this->localPosition != this->animation.goalPosition){
+        this->Translate(this->animation.translateStep);
+    }
     this->UpdatePoints();
     if (DISPLAY)
         if (this->route != nullptr)
@@ -52,46 +56,23 @@ void Drone::Draw() {
 }
 
 void Drone::Left(const double &angle) {
-    this->Rotate(angle, VectorZ);
+    this->animation.SetRotationGoal(angle);
 }
 
 void Drone::Right(const double &angle) {
-    this->Rotate(-angle, VectorZ);
+    this->animation.SetRotationGoal(-angle);
 }
 void Drone::FlyTo(const Vector3 &position, const double &height) {
     Vector3 moving = position - this->localPosition;
-    // // std::cout << direction << std::endl;
-    
-    Vector3 direction = {cos(this->eulerAngles[0]), sin(this->eulerAngles[1]), 0};
-    double angle = std::acos((direction & moving) / (moving.Length()* direction.Length() ));
-    angle = angle * 180/ M_PI;
-    std::cout << height << std::endl;
-    std::cout << "Angle: " << angle << std::endl;
-
-    std::cout << this->eulerAngles << std::endl;
-    std::cout << position << std::endl;
-
-    
-    std::cout << "Press Enter to continue..." << std::endl;
-    std::cin.ignore(std::numeric_limits<int>().max(), '\n');
-    this->Left(this->eulerAngles[0] - angle + 90);
-    this->Update();
-
-    std::cout << "Press Enter to continue..." << std::endl;
-    std::cin.ignore(std::numeric_limits<int>().max(), '\n');
+    Vector3 direction = {cos(this->eulerAngles[2]), sin(this->eulerAngles[2]), 0};
+    double angle = std::acos((direction & moving) / (moving.Length() * direction.Length()));
+    angle = angle * 180 / M_PI;
+    this->Left(this->eulerAngles[0] - angle);
     this->TookOff(height);
-    this->Update();
-
-    std::cout << "Press Enter to continue..." << std::endl;
-    std::cin.ignore(std::numeric_limits<int>().max(), '\n');
-    this->Translate(moving);this->Update();
-
-    std::cout << "Press Enter to continue..." << std::endl;
-    std::cin.ignore(std::numeric_limits<int>().max(), '\n');
+    this->Forward(moving.Length());
     this->TookOff(-height);
-    this->Update();
 }
-void Drone::MakeRoute(const Vector3 &startPosition, const Vector3 landPosition, const double &height){
+void Drone::MakeRoute(const Vector3 &startPosition, const Vector3 landPosition, const double &height) {
     delete this->route;
     this->route = new Route(startPosition, startPosition - landPosition, height, nullptr);
 }

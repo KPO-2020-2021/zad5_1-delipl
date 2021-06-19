@@ -1,15 +1,38 @@
 #ifndef __DRONE_HPP__
 #define __DRONE_HPP__
+
+
 #include "SceneObject.hpp"
+struct Animate {
+    Vector3 goalPosition = Vector3();
+    double goalRotation = 0;
+
+
+    Vector3 translateStep;
+    double rotateStep;
+    uint8_t speed = 10;
+    void SetTranslateGoal(const Vector3 &vec){
+        goalPosition += vec;
+        translateStep += vec / speed;
+    }
+
+    void SetRotationGoal(const double &d){
+      goalRotation +=d;
+      rotateStep += d / speed;
+    }
+};
 
 class Drone : public Cuboid {
   private:
     std::vector<std::shared_ptr<Rotor>> rotors;
     std::vector<std::shared_ptr<Cuboid>> eyes;
-
+    Animate animation;
     Route *route;
+    
 
   public:
+    bool isMoving = false;
+
     Drone(const Vector3 &position = Vector3(), const Vector3 &scale = Vector3({2, 2, 1}));
 
     ~Drone();

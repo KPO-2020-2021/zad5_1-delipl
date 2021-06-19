@@ -2,11 +2,7 @@
 #include "SceneObject.hpp"
 #include "Scene.hpp"
 #include "doctest.h"
-#ifdef _WIN32
-#include <Windows.h>
-#else
-#include <unistd.h>
-#endif
+
 extern bool DISPLAY;
 
 TEST_CASE("1. Route constructor"){

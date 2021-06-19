@@ -12,9 +12,10 @@
 #define __SCENE_HPP__
 #include <vector>
 
+#include "config.hpp"
 #include "Drone.hpp"
 #include "GnuPlotApi.hpp"
-#include "config.hpp"
+
 typedef PzG::LaczeDoGNUPlota GNUPlotApi;
 // class GNUPlotApi : public PzG::LaczeDoGNUPlota {
 //   public:
@@ -34,6 +35,10 @@ class Scene {
      * @brief std::vector of  objects on Scene
      */
     std::vector<std::shared_ptr<SceneObject>> activeObjects;
+
+
+
+    // 
 
   public:
     /**

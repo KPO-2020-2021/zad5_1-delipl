@@ -1,9 +1,21 @@
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
+
 #include <iostream>
 #include <limits>
+#include <thread>
+
+
 
 #include "Menu.hpp"
 #include "Scene.hpp"
 #include "config.hpp"
+
+
+
 bool DISPLAY = true;
 int main() {
     /* -------------------------------------------------------------------------- */
@@ -31,6 +43,13 @@ int main() {
     /* -------------------------------------------------------------------------- */
 
     Scene scene;
+    std::thread displaying([&scene]() {
+        while(true){
+            scene.Update();
+            usleep(200000);
+        }
+    });
+   
 
     std::shared_ptr<Drone> drone;
 
@@ -98,27 +117,30 @@ int main() {
     /* -------------------------------------------------------------------------- */
     /*                                  MAIN LOOP                                 */
     /* -------------------------------------------------------------------------- */
+    std::thread menuig([&menu, &drone, &finish]() {
+        while (!finish) {
+            std::cout << "=======================" << menu;
+            try {
+                std::cin >> menu;
+                std::cout << "=======================" << std::endl;
+            } catch (std::logic_error &e) {
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<int>().max(), '\n');
+                std::cerr << std::endl
+                          << std::endl
+                          << "!!![ERROR]!!!" << std::endl;
+                std::cerr << e.what() << std::endl
+                          << std::endl;
 
-    while (!finish) {
-        scene.Update();
-
-        std::cout << "=======================" << menu;
-        try {
-            std::cin >> menu;
-            std::cout << "=======================" << std::endl;
-        } catch (std::logic_error &e) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<int>().max(), '\n');
-            std::cerr << std::endl
-                      << std::endl
-                      << "!!![ERROR]!!!" << std::endl;
-            std::cerr << e.what() << std::endl
-                      << std::endl;
-
-        } catch (...) {
-            std::cerr << "Fatal error, cautch ununderstable throw!!!" << std::endl;
-            return -1;
+            } catch (...) {
+                std::cerr << "Fatal error, cautch ununderstable throw!!!" << std::endl;
+                exit(-1);
+            }
         }
-    }
+    });
+
+    displaying.join();
+    menuig.join();
+
     return 0;
 }

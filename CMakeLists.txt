@@ -31,6 +31,8 @@ include(LTO)
 include(Misc)
 include(Warnings)
 
+
+
 # Check for LTO support.
 find_lto(CXX)
 
@@ -77,6 +79,12 @@ target_set_warnings(main ENABLE ALL AS_ERROR ALL DISABLE Annoying) # Set warning
 target_enable_lto(main optimized)  # enable link-time-optimization if available for non-debug configurations
 
 # Set the properties you require, e.g. what C++ standard to use. Here applied to library and main (change as needed).
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+target_link_libraries(main PRIVATE Threads::Threads)
+
+
+
 set_target_properties(
     ${SOURCES_LIB} main 
     PROPERTIES 
