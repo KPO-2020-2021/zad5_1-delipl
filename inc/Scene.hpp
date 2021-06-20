@@ -57,7 +57,14 @@ class Scene {
         api.ZmienTrybRys(PzG::TR_3D);
         if(show)
           api.Rysuj();
-     //    api.UsunOstatniaNazwe();
+        api.UsunOstatniaNazwe();
+    }
+
+    inline static void AddToDrawable(SceneObject const *obj, const bool &show = true) {
+        api.DodajNazwePliku((std::string(TMP_FOLDER + obj->Name()).c_str()));
+        api.ZmienTrybRys(PzG::TR_3D);
+        if(show)
+          api.Rysuj();
     }
 
      inline static void Clear(){

@@ -16,6 +16,9 @@ void Transform::Rotate(const double &angle, const Vector3 &v) {
     if (v != VectorX && v != VectorY && v != VectorZ)
         throw std::logic_error("Cannot rotate");
     this->eulerAngles += v * angle;
+    if(this->eulerAngles[0] > 360) this->eulerAngles[0] -= 360;
+    if(this->eulerAngles[1] > 360) this->eulerAngles[1] -= 360;
+    if(this->eulerAngles[2] > 360) this->eulerAngles[2] -= 360;
 
     this->localRotation = this->localRotation * MatrixRot(angle, v);
 }

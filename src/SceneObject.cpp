@@ -42,7 +42,7 @@ Cuboid::Cuboid(const Vector3 &dimentions, const Vector3 &localPosition, Transfor
 
 Rotor::Rotor(const SpinDirection_t &direction, const Vector3 &localPosition, const Vector3 &scale, Transform *const pin) :
     SceneObject("prism.dat", localPosition, scale, pin),
-    spinSpeed{10},
+    spinSpeed{100},
     spinDirection{direction} {}
 
 void Rotor::Update() {

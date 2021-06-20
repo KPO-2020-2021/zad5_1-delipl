@@ -13,12 +13,17 @@ struct Animate {
     uint8_t speed = 10;
     void SetTranslateGoal(const Vector3 &vec){
         goalPosition += vec;
-        translateStep += vec / speed;
+        translateStep = {5, 5, 5};
     }
 
     void SetRotationGoal(const double &d){
       goalRotation +=d;
-      rotateStep += d / speed;
+      if (this->goalRotation >= 360)
+        goalRotation -= 360;
+      // if (this->goalRotation <= 0)
+      //   goalRotation += 360;
+
+      rotateStep = 5;
     }
 };
 

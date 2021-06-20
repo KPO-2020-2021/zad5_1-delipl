@@ -17,6 +17,12 @@
 
 
 bool DISPLAY = true;
+
+enum Draw{
+    goToDraw
+};
+
+
 int main() {
     /* -------------------------------------------------------------------------- */
     /*                              INIT INFORMATIONS                             */
@@ -44,12 +50,23 @@ int main() {
 
     Scene scene;
     std::thread displaying([&scene]() {
+        auto start = std::chrono::high_resolution_clock::now();
         while(true){
-            scene.Update();
-            usleep(200000);
+            auto measure = std::chrono::high_resolution_clock::now();
+            auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(measure - start);
+            try{
+                if(elapsed.count() >= (100)){
+                    start = std::chrono::high_resolution_clock::now();
+                    throw Draw::goToDraw;
+                }
+
+            }
+            catch(Draw){
+                scene.Update();
+            }
         }
     });
-   
+        
 
     std::shared_ptr<Drone> drone;
 
@@ -62,7 +79,8 @@ int main() {
     bool finish = false;
     std::vector<MatrixRot> rotationSequece;
     Menu menu({{"Print informations about selected object: ",
-                [&drone]() mutable {
+                [&drone]() mutable
+                {
                     if (drone == nullptr)
                         throw std::logic_error("Did not choosed the active object.");
                     std::cout << drone->SeflID() << " " << drone->Name() << std::endl;
@@ -74,29 +92,35 @@ int main() {
                               << drone->localRotation;
                 }},
                {"Add Drone: ",
-                [&scene]() {
+                [&scene]()
+                {
                     std::cout << "Where spawn drone Vector3: \n";
                     Vector3 pos;
                     std::cin >> pos;
                     std::shared_ptr<Drone> tmp = std::make_shared<Drone>(pos);
                     scene.Add(std::move(tmp));
                 }},
-               {"Choose active drone: ", [&drone, &scene]() {
+               {"Choose active drone: ", [&drone, &scene]()
+                {
                     std::cout << "There are " << scene.CountObjects() << " on scene. Type number. 1 - n" << std::endl;
                     std::size_t k =1;
                     std::size_t n = 0;
                     std::cin >> k;
-                    for (std::size_t i = 0; i < scene.CountObjects(); ++i){
+                    for (std::size_t i = 0; i < scene.CountObjects(); ++i)
+                    {
                         auto localPtr = std::dynamic_pointer_cast<Drone>(scene[i]);
-                        if (localPtr != nullptr) {
+                        if (localPtr != nullptr)
+                        {
                             ++n;
-                            if(n == k){
+                            if(n == k)
+                            {
                                 drone = localPtr;
                             }
                         }
                     }
                 }},
-               {"Fly to position", [&drone]() {
+               {"Fly to position", [&drone]()
+                {
                     if (drone == nullptr)
                         throw std::logic_error("Did not choosed the active object.");
                     std::cout << "Type finish position and height of flight." << std::endl;
@@ -105,10 +129,25 @@ int main() {
                     std::cin >> pos >> height;
                     drone->MakeRoute(drone->localPosition, pos, height);
                     drone->FlyTo(pos, height);
-                    
+                }},
+               {"Roatate left", [&drone]()
+                {
+                    double x;
+                    std::cin >> x;
+                    drone->Left(x);
+                }},
+               {"TookOff 0", [&drone]()
+                {
+                    double x;
+                    std::cin >> x;
+                    drone->TookOff(x);
                 }},
 
-               {"Exit", [&finish]() { finish = true; }}});
+               {"Exit", [&finish]()
+                {
+                    finish = true;
+                    std::terminate();
+                }}});
 
     std::shared_ptr<Drone> tmp = std::make_shared<Drone>();
     scene.Add(std::move(tmp));
