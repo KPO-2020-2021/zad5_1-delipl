@@ -32,8 +32,9 @@ std::shared_ptr<SceneObject> Scene::operator[](const std::size_t &i) const {
 }
 
 void Scene::Update(){
-
-    for(auto &obj : this->activeObjects){
+    
+    for (auto &obj : this->activeObjects)
+    {
         obj->Update();
     }
     if(this->activeObjects.size() != 0)

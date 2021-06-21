@@ -1,6 +1,7 @@
 #ifndef __DRONE_HPP__
 #define __DRONE_HPP__
-
+#include <queue>
+#include <functional>
 
 #include "SceneObject.hpp"
 struct Animate {
@@ -10,10 +11,13 @@ struct Animate {
 
     Vector3 translateStep;
     double rotateStep;
-    uint8_t speed = 10;
+    uint8_t speed = 5;
     void SetTranslateGoal(const Vector3 &vec){
-        goalPosition += vec;
-        translateStep = {5, 5, 5};
+      translateStep = vec - goalPosition;
+      std::cout<<"LOK: "<< goalPosition <<  "INPUT: "<< vec << " STEP: " << translateStep  <<  std::endl;
+      translateStep = translateStep / translateStep.Length();
+      translateStep = translateStep * speed;
+      goalPosition = vec;
     }
 
     void SetRotationGoal(const double &d){
@@ -33,10 +37,11 @@ class Drone : public Cuboid {
     std::vector<std::shared_ptr<Cuboid>> eyes;
     Animate animation;
     Route *route;
+
     
 
   public:
-    bool isMoving = false;
+    std::queue<std::function<void(void)>> moves;
 
     Drone(const Vector3 &position = Vector3(), const Vector3 &scale = Vector3({2, 2, 1}));
 
@@ -58,8 +63,12 @@ class Drone : public Cuboid {
 
     void Draw();
 
+    bool Rotated();
+
+    bool Translated();
+
     void FlyTo(const Vector3 &position, const double &height = 100);
 
-    void MakeRoute(const Vector3 &startPosition, const Vector3 landPosition, const double &height);
+    void MakeRoute(const Vector3 landPosition, const double &height);
 };
 #endif 

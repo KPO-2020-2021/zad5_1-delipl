@@ -127,7 +127,6 @@ int main() {
                     Vector3 pos;
                     double height;
                     std::cin >> pos >> height;
-                    drone->MakeRoute(drone->localPosition, pos, height);
                     drone->FlyTo(pos, height);
                 }},
                {"Roatate left", [&drone]()
@@ -142,6 +141,13 @@ int main() {
                     std::cin >> x;
                     drone->TookOff(x);
                 }},
+               {"Forward 0", [&drone]()
+                {
+                    double x;
+                    std::cin >> x;
+                    drone->Forward(x);
+                }},
+                
 
                {"Exit", [&finish]()
                 {
@@ -161,7 +167,7 @@ int main() {
             std::cout << "=======================" << menu;
             try {
                 std::cin >> menu;
-                std::cout << "=======================" << std::endl;
+                std::cout << "=======================" << std::endl; 
             } catch (std::logic_error &e) {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<int>().max(), '\n');

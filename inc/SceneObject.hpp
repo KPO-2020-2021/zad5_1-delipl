@@ -46,23 +46,23 @@ class SceneObject : public Object {
  * (the landing localPosition). 
  */
 class Route : public SceneObject {
-  private:
+
+  public:
     /**
      * @brief First point to drawing route
      */
-    const Vector3 startPoint;
+    Vector3 startPoint;
 
     /**
      * @brief Last point to drawing route
      */
-    const Vector3 finishPoint;
+    Vector3 finishPoint;
 
     /**
      * @brief height of line from start XY to finish XY
      */
-    const double height;
+    double height;
 
-  public:
     /**
      * @brief Construct a new Route object
      * 
@@ -77,7 +77,7 @@ class Route : public SceneObject {
     /**
      * @brief Empty Update
      */
-    void Update() override{};
+    void Update() override { this->UpdatePoints(); };
 
     bool CanLand() override { return true; };
 };
