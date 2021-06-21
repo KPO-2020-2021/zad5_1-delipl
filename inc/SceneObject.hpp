@@ -77,7 +77,13 @@ class Route : public SceneObject {
     /**
      * @brief Empty Update
      */
-    void Update() override { this->UpdatePoints(); };
+    void Update() override {
+      this->originPoints[0] = Vector3();
+      this->originPoints[1] = VectorZ * height;
+      this->originPoints[2] = this->finishPoint * (-1) + VectorZ * height;
+      this->originPoints[3] = this->finishPoint * (-1);
+      this->UpdatePoints();
+    };
 
     bool CanLand() override { return true; };
 };

@@ -125,9 +125,9 @@ int main() {
                         throw std::logic_error("Did not choosed the active object.");
                     std::cout << "Type finish position and height of flight." << std::endl;
                     Vector3 pos;
-                    double height;
-                    std::cin >> pos >> height;
-                    drone->FlyTo(pos, height);
+                    // double height;
+                    std::cin >> pos;
+                    drone->FlyTo(pos - VectorZ * pos[2], pos[2]);
                 }},
                {"Roatate left", [&drone]()
                 {

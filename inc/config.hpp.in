@@ -22,4 +22,4 @@
 #define WINDOW_SCALE 10
 
 // Minimal difference between two double numbers. It might be included
-#define MIN_DIFF 0.00000000001
+#define MIN_DIFF 0.0000001

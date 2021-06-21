@@ -29,7 +29,7 @@ TEST_CASE("3. Rotor pin and local and global positions"){
             cub.Rotate(2, VectorZ);
             cub.UpdatePoints();
             cub.Draw();
-            usleep(10000);
+            // usleep(10000);
             Scene::Clear();
         }
         std::cout << "Rotate cub" << std::endl;

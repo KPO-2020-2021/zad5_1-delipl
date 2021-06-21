@@ -8,7 +8,7 @@ Drone::Drone(const Vector3 &position, const Vector3 &scale) :
     // this->animation.goalRotation =
     // this->eulerAngles[2]=90;
     Vector3 rotorScale = scale * 10;
-    this->route = new Route(Vector3(), Vector3(), 0, this);
+    this->route = std::make_shared<Route>(Vector3(), Vector3(), 0, this);
     auto
         tmpPtr = std::shared_ptr<Rotor>(new Rotor(SpinDirection_t::Clockwise, (*(this->vertexes[0])) + VectorZ * this->dimentions[2], rotorScale, this));
     this->rotors.push_back(std::move(tmpPtr));
@@ -20,14 +20,14 @@ Drone::Drone(const Vector3 &position, const Vector3 &scale) :
     this->rotors.push_back(std::move(tmpPtr));
     if (DISPLAY)
         if (this->route != nullptr)
-            Scene::AddToDrawable(this->route);
+            Scene::AddToDrawable(this->route.get());
     for (auto &rotor : this->rotors) {
         rotor->Update();
         if (DISPLAY) {
             Scene::AddToDrawable(rotor.get());
         }
     }
-    this->Left(90);
+    this->Left(0);
 }
 
 Drone::~Drone() {}
@@ -108,12 +108,17 @@ void Drone::FlyTo(const Vector3 &position, const double &height) {
     // else
     // angle = angle * 180 / M_PI;
     Vector3 direction = {cos(this->eulerAngles[2] * M_PI / 180 ), sin(this->eulerAngles[2] * M_PI / 180 ), 0};
+
+
     double inAcos = (direction[0] * moving[0] + direction[1] * moving[1]) / moving.Length();
     double angle = acos(inAcos) * 180 / M_PI;
-    // this->MakeRoute(moving, height);
-
-    std::cout << "SAVED KAT: " << this->eulerAngles[2] << " INACOS "<< inAcos << std::endl;
-    std::cout << "KAT " << angle << " MOVING: "<<moving << " DIR: " << direction<< std::endl;
+    this->MakeRoute(this->animation.goalPosition, height);
+    std::cout << "COS: " << inAcos << " Dir: " << direction << std::endl;
+    std::cout << "KATY: " << this->eulerAngles << " POS: " << this->localPosition << " GOAL: " << position << std::endl;
+    std::cout << "Obr: " << angle << " MOV: " << moving << " MOV.LEN: " << moving.Length() << std::endl;
+    std::cout << " ===================\n";
+    // std::cout << "SAVED KAT: " << this->eulerAngles[2] << " INACOS "<< inAcos << std::endl;
+    // std::cout << "KAT " << angle << " MOVING: "<<moving << " DIR: " << direction<< std::endl;
     this->moves.push([height, this]()
                      {
                          this->TookOff(height);});

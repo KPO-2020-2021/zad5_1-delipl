@@ -44,6 +44,17 @@ Object::Object(const std::string name, const Vector3 &centerPosition,
     readFile.close();
 
     this->originPoints = std::vector<Vector3>(this->actualPoints.size(), Vector3());
+    double minZ = 0;
+    for (auto &point : this->actualPoints)
+    {
+        if(point[2] < minZ)
+            minZ = point[2];
+    }
+    for (auto &point : this->actualPoints)
+    {
+
+        point -= VectorZ * minZ;
+    }
     this->originPoints = this->actualPoints;
 
     ++Object::HMO;

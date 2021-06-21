@@ -36,7 +36,7 @@ class Drone : public Cuboid {
     std::vector<std::shared_ptr<Rotor>> rotors;
     std::vector<std::shared_ptr<Cuboid>> eyes;
     Animate animation;
-    Route *route;
+    std::shared_ptr<Route> route;
 
     
 

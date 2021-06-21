@@ -71,49 +71,52 @@ TEST_CASE("4. Move Drone") {
 }
 
 TEST_CASE("4. Drone forward and tookoff") {
-    Drone drone({30, 50, 65});
+    Drone drone;
 
     drone.Forward(60);
-    drone.Update();
-    CHECK(drone.localPosition == Vector3({30, 110, 65}));
-    if (DISPLAY) {
-        drone.Draw();
+    while (!drone.Translated())
+        drone.UpdatePoints();
+    CHECK(drone.localPosition == Vector3({60, 0, 0}));
+    
+    drone.Left(60);
+    while (!drone.Rotated())
+        drone.UpdatePoints();
+    CHECK(drone.localPosition == Vector3({60, 0, 0}));
+    CHECK(drone.eulerAngles == Vector3({0, 0, 60}));
 
-        std::cout << "Press Enter to continue..." << std::endl;
-        std::cin.ignore(std::numeric_limits<int>().max(), '\n');
-        Scene::Clear();
-    }
-    drone.TookOff(50);
-    drone.Update();
-    CHECK(drone.localPosition == Vector3({30, 110, 115}));
-    if (DISPLAY) {
-        drone.Draw();
-
-        std::cout << "Press Enter to continue..." << std::endl;
-        std::cin.ignore(std::numeric_limits<int>().max(), '\n');
-        Scene::Clear();
-    }
+    drone.Forward(60);
+    while (!drone.Translated())
+        drone.UpdatePoints();
+    CHECK(drone.localPosition == Vector3{90, 51.9615242271, 0});
 }
-TEST_CASE("5. Drone rotate") {
+TEST_CASE ("5. Fly to:"){
     Drone drone;
-    if (DISPLAY) {
-        drone.Draw();
-        std::cout << "Rotate Drone" << std::endl;
-        std::cout << "Press Enter to continue..." << std::endl;
+    drone.FlyTo({100, 0, 0}, 100);
+    drone.moves.front()();
+    drone.moves.pop();
+    while (!drone.Translated())
+        drone.Update();
+    CHECK(drone.localPosition == Vector3({0, 0, 100}));
 
-        std::cin.ignore(std::numeric_limits<int>().max(), '\n');
-        Scene::Clear();
-    }
-    drone.Left(90);
-    drone.Update();
-    if (DISPLAY) {
-        drone.Draw();
+    drone.moves.front()();
+    drone.moves.pop();
+    while (!drone.Rotated())
+        drone.Update();
+    CHECK(drone.localPosition == Vector3({0, 0, 100}));
 
-        std::cout << "Press Enter to continue..." << std::endl;
-        std::cin.ignore(std::numeric_limits<int>().max(), '\n');
-        Scene::Clear();
-    }
+    drone.moves.front()();
+    drone.moves.pop();
+    while (!drone.Translated())
+        drone.Update();
+    CHECK(drone.localPosition == Vector3({100, 0, 100}));
+
+    drone.moves.front()();
+    drone.moves.pop();
+    while (!drone.Translated())
+        drone.Update();
+    CHECK(drone.localPosition == Vector3({100, 0, 0}));
 }
+
     // TEST_CASE("2. Drone forward"){
     //     Drone d;
     //     d.Forward(100);
