@@ -7,7 +7,7 @@ Drone::Drone(const Vector3 &position, const Vector3 &scale) :
 
     this->directionVec = {cos(0), sin(0), 0};
     this->animation.goalRotation = 0;
-    this->eulerAngles[2] = this->animation.goalRotation;
+    this->anglesRPY[2] = this->animation.goalRotation;
     Vector3 rotorScale = scale * 10;
     this->route = std::make_shared<Route>(Vector3(), Vector3(), 0, nullptr);
     auto
@@ -36,12 +36,12 @@ Drone::Drone(const Vector3 &position, const Vector3 &scale) :
 Drone::~Drone() {}
 
 void Drone::Forward(const double &length) {
-    // std::cout << "KAT: " << this->eulerAngles[2] << std::endl;
-    // Vector3 direction = {cos(this->eulerAngles[2] * M_PI / 180), sin(this->eulerAngles[2] * M_PI / 180 ), 0};
-    this->animation.SetTranslateGoal(this->localPosition + this->directionVec * length);
+    // std::cout << "KAT: " << this->anglesRPY[2] << std::endl;
+    // Vector3 direction = {cos(this->anglesRPY[2] * M_PI / 180), sin(this->anglesRPY[2] * M_PI / 180 ), 0};
+    this->animation.SetPositionGoal(this->position + this->directionVec * length);
 }
 void Drone::TookOff(const double &length) {
-    this->animation.SetTranslateGoal(this->localPosition + VectorZ * length);
+    this->animation.SetPositionGoal(this->position + VectorZ * length);
 }
 
 
@@ -54,16 +54,16 @@ void Drone::Draw() {
 }
 
 void Drone::Left(const double &angle) {
-    this->animation.SetRotationGoal(angle);
+    this->animation.SetOrientationGoal(angle);
 }
 
 void Drone::Right(const double &angle) {
-    this->animation.SetRotationGoal(-angle);
+    this->animation.SetOrientationGoal(-angle);
 }
 
 bool Drone::Translated(){
-    auto translateDiff = this->animation.goalPosition - this->localPosition;
-    // std::cout << this->localPosition.Length() << "  " << translateDiff.Length() << std::endl;
+    auto translateDiff = this->animation.goalPosition - this->position;
+    // std::cout << this->position.Length() << "  " << translateDiff.Length() << std::endl;
     if (translateDiff.Length() > this->animation.translateStep.Length()){
         this->Translate(this->animation.translateStep);
     }
@@ -71,15 +71,15 @@ bool Drone::Translated(){
     {
         this->Translate((translateDiff - this->animation.translateStep));
         this->Translate(this->animation.translateStep);
-        // std::cout << this->localPosition << "  " << translateDiff << std::endl;
+        // std::cout << this->position << "  " << translateDiff << std::endl;
         return true;
     }
     return false;
 }
 
 bool Drone::Rotated(){
-    auto angleDiff = this->eulerAngles[2] - this->animation.goalRotation;
-    //  std::cout << eulerAngles[2] << "  "<<this->animation.goalRotation << std::endl;
+    auto angleDiff = this->anglesRPY[2] - this->animation.goalRotation;
+    //  std::cout << anglesRPY[2] << "  "<<this->animation.goalRotation << std::endl;
     if (std::fabs(angleDiff) >= this->animation.rotateStep)
     {
         if (angleDiff < 0)
@@ -87,23 +87,23 @@ bool Drone::Rotated(){
         else if (angleDiff > 0)
             this->Rotate(-this->animation.rotateStep, VectorZ);
     }
-    else if (eulerAngles[2] == this->animation.goalRotation)
+    else if (anglesRPY[2] == this->animation.goalRotation)
     {
         return true;
     }
-    else if (std::fabs(this->eulerAngles[2] - this->animation.goalRotation) <= this->animation.rotateStep)
+    else if (std::fabs(this->anglesRPY[2] - this->animation.goalRotation) <= this->animation.rotateStep)
     {
         this->Rotate(-angleDiff, VectorZ);
     }
 
-    this->directionVec = {cos(this->eulerAngles[2] * M_PI / 180), sin(this->eulerAngles[2] * M_PI / 180), 0};
+    this->directionVec = {cos(this->anglesRPY[2] * M_PI / 180), sin(this->anglesRPY[2] * M_PI / 180), 0};
 
     return false;
 }
 
 // TO DO PID
 void Drone::FlyTo(const Vector3 &position, const double &height) {
-    Vector3 moving = this->localPosition*(-1) + position;
+    Vector3 moving = this->position*(-1) + position;
     double inAcos = (this->directionVec[0] * moving[0] + this->directionVec[1] * moving[1]) / moving.Length();
     if(inAcos <= -1)
         inAcos += 1;
@@ -127,7 +127,7 @@ void Drone::FlyTo(const Vector3 &position, const double &height) {
 
 void Drone::MakeRoute(const double &height, const double &angle, const double &length)
 {
-    this->route->startPoint = this->localPosition;
+    this->route->startPoint = this->position;
     this->route->finishPoint = Vector3({cos(angle * M_PI / 180), sin(angle * M_PI / 180), 0}) * length;
     this->route->height = height;
     this->route->Update();

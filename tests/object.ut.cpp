@@ -6,7 +6,7 @@
 // TEST_CASE("1. Transform constructor"){
 //     // CHECK_NOTHROW(Transform trans);
 //     Transform trans;
-//     CHECK(trans.localPosition == Vector3());
+//     CHECK(trans.position == Vector3());
 //     CHECK(trans.localRotation == MatrixRot());
 //     // CHECK(trans.pinnedTransform == nullptr);
 //     CHECK(trans.scale == MatrixRot());

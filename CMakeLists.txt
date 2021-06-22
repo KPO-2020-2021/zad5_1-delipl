@@ -39,24 +39,25 @@ find_lto(CXX)
 # --------------------------------------------------------------------------------
 #                         Locate files (change as needed).
 # --------------------------------------------------------------------------------
-# file(GLOB SOURCES ./src/*.cpp) # All .cpp files in src/
-set(SOURCES ./src/Vectors.cpp 
-            ./src/Matrixes.cpp
-            ./src/Object.cpp
-            ./src/SceneObject.cpp
-            ./src/Drone.cpp
+file(GLOB SOURCES "./src/*.cpp") # All .cpp files in src/
+file(GLOB SCENE_OBJECTS "./src/SceneObjects/*.cpp") # All .cpp files in src/
+# set(SOURCES ./src/Vectors.cpp 
+#             ./src/Matrixes.cpp
+#             ./src/Object.cpp
+#             ./src/SceneObject.cpp
+#             ./src/Drone.cpp
 
-            ./src/GnuPlotApi.cpp
-            ./src/Scene.cpp
+#             ./src/GnuPlotApi.cpp
+#             ./src/Scene.cpp
 
-            ./src/Menu.cpp 
+#             ./src/Menu.cpp 
         
             
-)
+# )
 
 file(GLOB TEST_FILES ./tests/*.ut.cpp)       # All .cpp files in tests/
 
-add_library(SOURCES_LIB ${SOURCES})
+add_library(SOURCES_LIB ${SOURCES} ${SCENE_OBJECTS})
 # --------------------------------------------------------------------------------
 #                            Build! (Change as needed)
 # --------------------------------------------------------------------------------
@@ -64,7 +65,7 @@ add_library(SOURCES_LIB ${SOURCES})
 
 # Set the compile options you want (change as needed).
 target_set_warnings(SOURCES_LIB ENABLE ALL AS_ERROR ALL DISABLE Annoying)
-target_include_directories(SOURCES_LIB PRIVATE ./inc ./prn)
+target_include_directories(SOURCES_LIB PUBLIC ./inc ./inc/SceneObjects ./prn)
 
 
 # Add an executable for the file app/main.cpp.
@@ -84,11 +85,10 @@ find_package(Threads REQUIRED)
 target_link_libraries(main PRIVATE Threads::Threads)
 
 
-
 set_target_properties(
     ${SOURCES_LIB} main 
     PROPERTIES 
-    CXX_STANDARD 17 
+    CXX_STANDARD 17
     CXX_STANDARD_REQUIRED YES 
     CXX_EXTENSIONS NO
     WORKING_DIRECTORY 	CMAKE_HOME_DIRECTORY
@@ -98,29 +98,6 @@ set_target_properties(
 add_subdirectory(./tests)
 
 
-#  -------------------------------------------------------------------------- #
-#                                   Soft Body                                 #
-#  -------------------------------------------------------------------------- #
-# Add an executable for the file app/main.cpp.
-# If you add more executables, copy these lines accordingly.
-add_executable(softBody app/softBody.cpp)   # Name of exec. and location of file.
-
-target_include_directories(softBody PRIVATE ./inc ./prn)
-target_link_libraries(softBody PUBLIC SOURCES_LIB)
-
-target_set_warnings(main ENABLE ALL AS_ERROR ALL DISABLE Annoying) # Set warnings (if needed).
-target_enable_lto(main optimized)  # enable link-time-optimization if available for non-debug configurations
-
-# Set the properties you require, e.g. what C++ standard to use. Here applied to library and main (change as needed).
-set_target_properties(
-    SOURCES_LIB softBody 
-    PROPERTIES 
-    CXX_STANDARD 17 
-    CXX_STANDARD_REQUIRED YES 
-    CXX_EXTENSIONS NO
-    WORKING_DIRECTORY  ${PROJECT_SOURCE_DIR}
-    
-)
 
 # verbose full described tests (make fulltest)
 add_custom_target(app

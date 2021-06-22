@@ -12,10 +12,10 @@ TEST_CASE("1. Route constructor"){
     CHECK_NOTHROW(new  Route (start, stop, 50.0));
 }
 TEST_CASE("2. Rotor constructor") {
-    Vector3 localPosition({0, 0, 0});
-    CHECK_NOTHROW(Rotor rotor(SpinDirection_t::Clockwise, localPosition, {1, 1, 1}, nullptr));
-    Rotor rotor(SpinDirection_t::Clockwise, localPosition, {1,1,1}, nullptr);
-    CHECK_NOTHROW(Rotor x(SpinDirection_t::Clockwise, localPosition, {1, 1, 1}, &rotor));
+    Vector3 position({0, 0, 0});
+    CHECK_NOTHROW(Rotor rotor(SpinDirection_t::Clockwise, position, {1, 1, 1}, nullptr));
+    Rotor rotor(SpinDirection_t::Clockwise, position, {1,1,1}, nullptr);
+    CHECK_NOTHROW(Rotor x(SpinDirection_t::Clockwise, position, {1, 1, 1}, &rotor));
 }
 
 TEST_CASE("3. Rotor pin and local and global positions"){
@@ -41,14 +41,14 @@ TEST_CASE("3. Rotor pin and local and global positions"){
     // SceneObject drone("cuboid.dat", {0, 0, 50}, {0.2, 0.2, 0.2});
     // Rotor rotor({0, 0, 30}, std::make_shared<Transform>(drone), SpinDirection_t::Clockwise);
 
-    // CHECK(drone.localPosition == Vector3({0, 0, 50}));
+    // CHECK(drone.position == Vector3({0, 0, 50}));
     // CHECK(drone[0] == Vector3({0, -4, 50}));
 
     // drone.Translate({50, 0, 0});
     // drone.UpdatePoints();
     // rotor.UpdatePoints();
 
-    // CHECK(rotor.localPosition == drone.localPosition + VectorZ * 30);
+    // CHECK(rotor.position == drone.position + VectorZ * 30);
     // CHECK(rotor[0] == Vector3({50, 0, 79.5}));
     // CHECK(rotor[1] == Vector3({50.5, 0, 79.5}));
     // CHECK(rotor[2] == Vector3({50.5, 0, 80.5}));
@@ -57,7 +57,7 @@ TEST_CASE("3. Rotor pin and local and global positions"){
     // Rotor rotor2({0, 0, 0}, &rotor, SpinDirection_t::Clockwise);
 
     // SUBCASE("Spawn correctlly"){
-    //     CHECK(rotor.localPosition == rotor2.localPosition);
+    //     CHECK(rotor.position == rotor2.position);
     //     CHECK(rotor2[0] == Vector3({50, 0, 79.5}));
     //     CHECK(rotor2[1] == Vector3({50.5, 0, 79.5}));
     //     CHECK(rotor2[2] == Vector3({50.5, 0, 80.5}));

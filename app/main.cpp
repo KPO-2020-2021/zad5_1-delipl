@@ -84,10 +84,10 @@ int main() {
                     if (drone == nullptr)
                         throw std::logic_error("Did not choosed the active object.");
                     std::cout << drone->SeflID() << " " << drone->Name() << std::endl;
-                    std::cout << "localPosition: \n"
-                              << drone->localPosition
-                              << "\neuler angles: \n"
-                              << drone->eulerAngles
+                    std::cout << "position: \n"
+                              << drone->position
+                              << "\neuler anglesRPY: \n"
+                              << drone->anglesRPY
                               << "\nrotation Matrix: \n"
                               << drone->localRotation;
                 }},
@@ -135,10 +135,6 @@ int main() {
                     drone->moves.push([pos, drone]()
                                      { drone->TookOff(pos[0]*-1); });
 
-                    // Vector3 vec = {cos(drone->eulerAngles[2] * M_PI / 180 - M_PI / 2), sin(drone->eulerAngles[2] * M_PI / 180 - M_PI / 2), 0};
-
-                    // std::cout << drone->eulerAngles[2] + pos[1] << "\t"
-                    //           << "\t" << vec << std::endl;
 
                     drone->MakeRoute(pos[0], pos[1], pos[2]);
                 }},

@@ -8,20 +8,6 @@
 #define TMP_FOLDER "tmp/"
 #endif  // !1
 
-void Transform::Translate(const Vector3 &v) {
-    this->localPosition += v;
-}
-
-void Transform::Rotate(const double &angle, const Vector3 &v) {
-    if (v != VectorX && v != VectorY && v != VectorZ)
-        throw std::logic_error("Cannot rotate");
-    this->eulerAngles += v * angle;
-    if(this->eulerAngles[0] > 360) this->eulerAngles[0] -= 360;
-    if(this->eulerAngles[1] > 360) this->eulerAngles[1] -= 360;
-    if(this->eulerAngles[2] > 360) this->eulerAngles[2] -= 360;
-
-    this->localRotation = this->localRotation * MatrixRot(angle, v);
-}
 
 Object::Object(const std::string name, const Vector3 &centerPosition,
                const Vector3 &scale, Transform *const &pin) :
@@ -31,7 +17,7 @@ Object::Object(const std::string name, const Vector3 &centerPosition,
     this->scale[1][1] = scale[1];
     this->scale[2][2] = scale[2];
 
-    this->localPosition = centerPosition;
+    this->position = centerPosition;
     this->localRotation = MatrixRot();
 
     std::ifstream readFile(DATA_FOLDER + name);
@@ -74,7 +60,7 @@ Object::Object(const std::string name, const Vector3 &centerPosition,
 //     this->lenPointsPack = obj.LengthOfPointPack();
 //     this->localRotation = obj.localRotation;
 //     this->scale = obj.scale;
-//     this->localPosition = obj.localPosition;
+//     this->position = obj.position;
 
 //     this->originPoints = obj.OriginPoints();
 //     for (std::size_t i = 0; i < obj.CountPoints(); ++i) {

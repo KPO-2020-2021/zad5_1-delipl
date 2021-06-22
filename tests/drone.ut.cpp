@@ -60,7 +60,7 @@ TEST_CASE("4. Move Drone") {
     Drone drone({30, 50, 65});
     drone.Translate({-30, -50, -65});
     drone.Update();
-    CHECK(drone.localPosition == Vector3());
+    CHECK(drone.position == Vector3());
     if (DISPLAY) {
         drone.Draw();
 
@@ -76,18 +76,18 @@ TEST_CASE("4. Drone forward and tookoff") {
     drone.Forward(60);
     while (!drone.Translated())
         drone.UpdatePoints();
-    CHECK(drone.localPosition == Vector3({60, 0, 0}));
+    CHECK(drone.position == Vector3({60, 0, 0}));
     
     drone.Left(60);
     while (!drone.Rotated())
         drone.UpdatePoints();
-    CHECK(drone.localPosition == Vector3({60, 0, 0}));
-    CHECK(drone.eulerAngles == Vector3({0, 0, 60}));
+    CHECK(drone.position == Vector3({60, 0, 0}));
+    CHECK(drone.anglesRPY == Vector3({0, 0, 60}));
 
     drone.Forward(60);
     while (!drone.Translated())
         drone.UpdatePoints();
-    CHECK(drone.localPosition == Vector3{90, 51.9615242271, 0});
+    CHECK(drone.position == Vector3{90, 51.9615242271, 0});
 }
 TEST_CASE ("5. Fly to:"){
     // Drone drone;
@@ -96,31 +96,31 @@ TEST_CASE ("5. Fly to:"){
     // drone.moves.pop();
     // while (!drone.Translated())
     //     drone.Update();
-    // CHECK(drone.localPosition == Vector3({0, 0, 100}));
+    // CHECK(drone.position == Vector3({0, 0, 100}));
 
     // drone.moves.front()();
     // drone.moves.pop();
     // while (!drone.Rotated())
     //     drone.Update();
-    // CHECK(drone.localPosition == Vector3({0, 0, 100}));
+    // CHECK(drone.position == Vector3({0, 0, 100}));
 
     // drone.moves.front()();
     // drone.moves.pop();
     // while (!drone.Translated()){
     //     drone.Update();
-    //     std::cout << drone.localPosition << std::endl;
+    //     std::cout << drone.position << std::endl;
     // }
-    // CHECK(drone.localPosition == Vector3({100, 0, 100}));
+    // CHECK(drone.position == Vector3({100, 0, 100}));
 
     // drone.moves.front()();
     // drone.moves.pop();
     // while (!drone.Translated())
     //     drone.Update();
-    // CHECK(drone.localPosition == Vector3({100, 0, 0}));
+    // CHECK(drone.position == Vector3({100, 0, 0}));
 }
 
     // TEST_CASE("2. Drone forward"){
     //     Drone d;
     //     d.Forward(100);
-    //     CHECK(d.localPosition == Vector3({100, 0, 0}));
+    //     CHECK(d.position == Vector3({100, 0, 0}));
     // }
