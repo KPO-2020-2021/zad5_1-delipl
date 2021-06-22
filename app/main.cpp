@@ -10,9 +10,12 @@
 
 
 
+#include "config.hpp"
+#include "Terrain.hpp"
+#include "Drone.hpp"
+
 #include "Menu.hpp"
 #include "Scene.hpp"
-#include "config.hpp"
 
 
 
@@ -142,8 +145,7 @@ int main() {
                {"Exit", [&finish, &scene]()
                 {
                     finish = true;
-                    scene.~Scene();
-                    std::terminate();
+                    throw std::logic_error("Exit");
                     
                 }}});
 
@@ -154,7 +156,7 @@ int main() {
     /* -------------------------------------------------------------------------- */
     /*                                  MAIN LOOP                                 */
     /* -------------------------------------------------------------------------- */
-    std::thread menuig([&menu, &drone, &finish]() {
+    std::thread menuig([&menu, &drone, &finish, &scene]() {
         while (!finish) {
             std::cout << "=======================" << menu;
             try {
@@ -163,14 +165,20 @@ int main() {
             } catch (std::logic_error &e) {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<int>().max(), '\n');
+                if(std::string(e.what()) == "Exit"){
+                    scene.~Scene();
+                    exit(0);
+                }
                 std::cerr << std::endl
                           << std::endl
                           << "!!![ERROR]!!!" << std::endl;
                 std::cerr << e.what() << std::endl
                           << std::endl;
-
-            } catch (...) {
+                
+            }
+            catch (...) {
                 std::cerr << "Fatal error, cautch ununderstable throw!!!" << std::endl;
+                scene.~Scene();
                 exit(-1);
             }
         }

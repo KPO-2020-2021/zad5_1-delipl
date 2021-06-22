@@ -7,7 +7,7 @@ Scene::Scene(){
 
 Scene::~Scene(){
     // system("pwd");
-    system("killall gnuplot");
+    system("killall gnuplot  /usr/lib/gnuplot/gnuplot_qt");
 }
 
 void Scene::Add(const std::shared_ptr<SceneObject> &obj) {

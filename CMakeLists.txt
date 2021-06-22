@@ -11,6 +11,8 @@ cmake_minimum_required(VERSION 3.12)
 # Version numbers are available by including "exampleConfig.h" in 
 # the source. See exampleConfig.h.in for some more details.
 project(Rotations VERSION 2.0.0.0 LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
 # Options: Things you can set via commandline options to cmake (e.g. -DENABLE_LTO=[ON|OFF])
@@ -91,7 +93,8 @@ set_target_properties(
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED YES 
     CXX_EXTENSIONS NO
-    WORKING_DIRECTORY 	CMAKE_HOME_DIRECTORY
+    WORKING_DIRECTORY  ${PROJECT_SOURCE_DIR}
+    VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
 )
 
 # Set up tests (see tests/CMakeLists.txt).
@@ -102,4 +105,5 @@ add_subdirectory(./tests)
 # verbose full described tests (make fulltest)
 add_custom_target(app
    main
+    VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
     WORKING_DIRECTORY  ${PROJECT_SOURCE_DIR})
