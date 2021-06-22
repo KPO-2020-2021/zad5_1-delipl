@@ -119,40 +119,36 @@ int main() {
                         }
                     }
                 }},
-               {"Fly to position", [&drone]()
+               {"Move drone", [&drone]()
                 {
                     if (drone == nullptr)
                         throw std::logic_error("Did not choosed the active object.");
-                    std::cout << "Type finish position and height of flight." << std::endl;
+                    std::cout << "Type height, angle and length of move." << std::endl;
                     Vector3 pos;
-                    // double height;
                     std::cin >> pos;
-                    drone->FlyTo(pos - VectorZ * pos[2], pos[2]);
-                }},
-               {"Roatate left", [&drone]()
-                {
-                    double x;
-                    std::cin >> x;
-                    drone->Left(x);
-                }},
-               {"TookOff 0", [&drone]()
-                {
-                    double x;
-                    std::cin >> x;
-                    drone->TookOff(x);
-                }},
-               {"Forward 0", [&drone]()
-                {
-                    double x;
-                    std::cin >> x;
-                    drone->Forward(x);
-                }},
-                
+                    drone->moves.push([pos, drone]()
+                                     { drone->TookOff(pos[0] ); });
+                    drone->moves.push([pos, drone]()
+                                     { drone->Right(pos[1]); });
+                    drone->moves.push([pos, drone]()
+                                     { drone->Forward(pos[2]); });
+                    drone->moves.push([pos, drone]()
+                                     { drone->TookOff(pos[0]*-1); });
 
-               {"Exit", [&finish]()
+                    // Vector3 vec = {cos(drone->eulerAngles[2] * M_PI / 180 - M_PI / 2), sin(drone->eulerAngles[2] * M_PI / 180 - M_PI / 2), 0};
+
+                    // std::cout << drone->eulerAngles[2] + pos[1] << "\t"
+                    //           << "\t" << vec << std::endl;
+
+                    drone->MakeRoute(pos[0], pos[1], pos[2]);
+                }},
+
+               {"Exit", [&finish, &scene]()
                 {
                     finish = true;
+                    scene.~Scene();
                     std::terminate();
+                    
                 }}});
 
     std::shared_ptr<Drone> tmp = std::make_shared<Drone>();

@@ -76,12 +76,13 @@ class Route : public SceneObject {
 
     /**
      * @brief Empty Update
+     * 
      */
     void Update() override {
-      this->originPoints[0] = Vector3();
-      this->originPoints[1] = VectorZ * height;
-      this->originPoints[2] = this->finishPoint * (-1) + VectorZ * height;
-      this->originPoints[3] = this->finishPoint * (-1);
+      this->originPoints[0] = startPoint;
+      this->originPoints[1] = startPoint + VectorZ * height;
+      this->originPoints[2] = this->finishPoint + VectorZ * height;
+      this->originPoints[3] = this->finishPoint;
       this->UpdatePoints();
     };
 
