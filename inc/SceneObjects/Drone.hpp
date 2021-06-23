@@ -11,13 +11,14 @@
 
 class Drone : public SceneObject {
   private:
-    
+    Animation animation;
+    Vector3 directionVec;
+
+    std::shared_ptr<Cuboid> body;
+
     std::vector<std::shared_ptr<Rotor>> rotors;
     std::vector<std::shared_ptr<Cuboid>> eyes;
-    Animation animation;
     std::shared_ptr<Route> route;
-
-    Vector3 directionVec;
 
   public:
     std::queue<std::function<void(void)>> moves;

@@ -23,22 +23,27 @@ SceneObject("point.dat", position, scale, nullptr)
 
 
     this->directionVec = {cos(0), sin(0), 0};
-    this->animation.goalRotation = 0;
-    this->anglesRPY[2] = this->animation.goalRotation;
+    this->animation.goalOrientation = 0;
+    this->anglesRPY[2] = this->animation.goalOrientation;
     Vector3 rotorScale = scale * 10;
+
+    this->body = std::make_shared<Cuboid>(scale*0.5 + VectorZ*0.5, position, this);
     this->route = std::make_shared<Route>(Vector3(), Vector3(), 0, nullptr);
-    auto
-        tmpPtr = std::shared_ptr<Rotor>(new Rotor(SpinDirection_t::Clockwise, (*(this->vertexes[0])) + VectorZ * this->dimentions[2], rotorScale, this));
+    auto tmpPtr = std::shared_ptr<Rotor>(new Rotor(SpinDirection_t::Clockwise, (*(this->body->vertexes[0])) + VectorZ * this->body->dimentions[2], rotorScale, this));
     this->rotors.push_back(std::move(tmpPtr));
-    tmpPtr = std::shared_ptr<Rotor>(new Rotor(SpinDirection_t::Clockwise, (*(this->vertexes[1])) + VectorZ * this->dimentions[2], rotorScale, this));
+    tmpPtr = std::shared_ptr<Rotor>(new Rotor(SpinDirection_t::Clockwise, (*(this->body->vertexes[1])) + VectorZ * this->body->dimentions[2], rotorScale, this));
     this->rotors.push_back(std::move(tmpPtr));
-    tmpPtr = std::shared_ptr<Rotor>(new Rotor(SpinDirection_t::CounterClockwise, (*(this->vertexes[6])) + VectorZ * this->dimentions[2], rotorScale, this));
+    tmpPtr = std::shared_ptr<Rotor>(new Rotor(SpinDirection_t::CounterClockwise, (*(this->body->vertexes[6])) + VectorZ * this->body->dimentions[2], rotorScale, this));
     this->rotors.push_back(std::move(tmpPtr));
-    tmpPtr = std::shared_ptr<Rotor>(new Rotor(SpinDirection_t::CounterClockwise, (*(this->vertexes[7])) + VectorZ * this->dimentions[2], rotorScale, this));
+    tmpPtr = std::shared_ptr<Rotor>(new Rotor(SpinDirection_t::CounterClockwise, (*(this->body->vertexes[7])) + VectorZ * this->body->dimentions[2], rotorScale, this));
     this->rotors.push_back(std::move(tmpPtr));
-    if (DISPLAY)
-        if (this->route != nullptr)
-            Scene::AddToDrawable(this->route.get());
+    
+    
+    if (DISPLAY){
+        Scene::AddToDrawable(this->route.get());
+        Scene::AddToDrawable(this->body.get());
+    }
+            
     for (auto &rotor : this->rotors) {
         rotor->Update();
         if (DISPLAY) {
@@ -47,11 +52,12 @@ SceneObject("point.dat", position, scale, nullptr)
     }
  
     this->Left(0);
-    for (auto &rotor : this->rotors)
-    {
-        rotor->Rotate(15*static_cast<int>(rotor->spinDirection), VectorX);
-        rotor->UpdatePoints();
-    }
+    this->body->UpdatePoints();
+    // for (auto &rotor : this->rotors)
+    // {
+    //     rotor->Rotate(15*static_cast<int>(rotor->spinDirection), VectorX);
+    //     rotor->UpdatePoints();
+    // }
 }
 
 Drone::~Drone() {}
@@ -59,18 +65,25 @@ Drone::~Drone() {}
 void Drone::Forward(const double &length) {
     // std::cout << "KAT: " << this->anglesRPY[2] << std::endl;
     // Vector3 direction = {cos(this->anglesRPY[2] * M_PI / 180), sin(this->anglesRPY[2] * M_PI / 180 ), 0};
-    this->animation.SetPositionGoal(this->position + this->directionVec * length);
+    this->animation.SetGoalPosition(this->position + this->directionVec * length);
+
+    // rotors[0]->Rotate(15, VectorY);
+    // rotors[2]->Rotate(15, VectorX);
     
-    // rotors[1]->Rotate(90, VectorX);
+    // rotors[1]->Rotate(-15, VectorX);
+    // rotors[3]->Rotate(-15, VectorY);
 
-    // rotors[2]->Rotate(90, VectorX);
-
-    // rotors[3]->Rotate(90, VectorY);
-
-    
+    // this->body->Rotate(15, VectorY);
 }
 void Drone::TookOff(const double &length) {
-    this->animation.SetPositionGoal(this->position + VectorZ * length);
+    this->animation.SetGoalPosition(this->position + VectorZ * length);
+    // rotors[0]->Rotate(0, VectorY);
+    // rotors[1]->Rotate(0, VectorX);
+
+    // rotors[2]->Rotate(0, VectorX);
+
+    // rotors[3]->Rotate(0, VectorY);
+    // this->body->Rotate(0, VectorY);
 }
 
 
@@ -83,11 +96,11 @@ void Drone::Draw() {
 }
 
 void Drone::Left(const double &angle) {
-    this->animation.SetOrientationGoal(angle);
+    this->animation.SetGoalOrientation(angle);
 }
 
 void Drone::Right(const double &angle) {
-    this->animation.SetOrientationGoal(-angle);
+    this->animation.SetGoalOrientation(-angle);
 }
 
 bool Drone::Translated(){
@@ -109,8 +122,8 @@ bool Drone::Translated(){
 }
 
 bool Drone::Rotated(){
-    auto angleDiff = this->anglesRPY[2] - this->animation.goalRotation;
-    //  std::cout << anglesRPY[2] << "  "<<this->animation.goalRotation << std::endl;
+    auto angleDiff = this->anglesRPY[2] - this->animation.goalOrientation;
+    //  std::cout << anglesRPY[2] << "  "<<this->animation.goalOrientation << std::endl;
     if (std::fabs(angleDiff) >= this->animation.rotateStep)
     {
         if (angleDiff < 0)
@@ -118,11 +131,11 @@ bool Drone::Rotated(){
         else if (angleDiff > 0)
             this->Rotate(-this->animation.rotateStep, VectorZ);
     }
-    else if (anglesRPY[2] == this->animation.goalRotation)
+    else if (anglesRPY[2] == this->animation.goalOrientation)
     {
         return true;
     }
-    else if (std::fabs(this->anglesRPY[2] - this->animation.goalRotation) <= this->animation.rotateStep)
+    else if (std::fabs(this->anglesRPY[2] - this->animation.goalOrientation) <= this->animation.rotateStep)
     {
         this->Rotate(-angleDiff, VectorZ);
     }
@@ -177,7 +190,8 @@ void Drone::Update() {
     }
 
     this->UpdatePoints();
-    
+
+    this->body->UpdatePoints();
     for (auto &rotor : this->rotors) {
         rotor->Update();
     }
