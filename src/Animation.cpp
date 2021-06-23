@@ -12,5 +12,5 @@ void Animation::SetOrientationGoal(const double &d) {
     if (this->goalRotation >= 360)
         goalRotation -= 360;
 
-    rotateStep = 5;
+    rotateStep = 10;
 }

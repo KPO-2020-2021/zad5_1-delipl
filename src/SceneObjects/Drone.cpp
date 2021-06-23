@@ -71,6 +71,7 @@ bool Drone::Translated(){
     {
         this->Translate((translateDiff - this->animation.translateStep));
         this->Translate(this->animation.translateStep);
+
         // std::cout << this->position << "  " << translateDiff << std::endl;
         return true;
     }
@@ -127,8 +128,9 @@ void Drone::FlyTo(const Vector3 &position, const double &height) {
 
 void Drone::MakeRoute(const double &height, const double &angle, const double &length)
 {
+    double angleRad = (this->anglesRPY[2] - angle) * M_PI / 180;
     this->route->startPoint = this->position;
-    this->route->finishPoint = Vector3({cos(angle * M_PI / 180), sin(angle * M_PI / 180), 0}) * length;
+    this->route->finishPoint = Vector3({cos(angleRad), sin(angleRad), 0}) * length + this->position;
     this->route->height = height;
     this->route->Update();
 }

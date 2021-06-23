@@ -129,14 +129,18 @@ int main() {
                     std::cout << "Type height, angle and length of move." << std::endl;
                     Vector3 pos;
                     std::cin >> pos;
-                    drone->moves.push([pos, drone]()
-                                     { drone->TookOff(pos[0] ); });
-                    drone->moves.push([pos, drone]()
-                                     { drone->Right(pos[1]); });
-                    drone->moves.push([pos, drone]()
-                                     { drone->Forward(pos[2]); });
-                    drone->moves.push([pos, drone]()
-                                     { drone->TookOff(pos[0]*-1); });
+                    if(pos[0] != 0)
+                        drone->moves.push([pos, drone]()
+                                        { drone->TookOff(pos[0] ); });
+                    if (pos[1] != 0)
+                        drone->moves.push([pos, drone]()
+                                          { drone->Right(pos[1]); });
+                    if (pos[2] != 0)
+                        drone->moves.push([pos, drone]()
+                                          { drone->Forward(pos[2]); });
+                    if (pos[0] != 0)
+                        drone->moves.push([pos, drone]()
+                                          { drone->TookOff(pos[0] * -1); });
 
 
                     drone->MakeRoute(pos[0], pos[1], pos[2]);
