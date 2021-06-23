@@ -2,8 +2,25 @@
 
 #include "Scene.hpp"
 extern bool DISPLAY;
-Drone::Drone(const Vector3 &position, const Vector3 &scale) :
-    Cuboid(scale, position, nullptr) {
+Drone::Drone(const Vector3 &position, const Vector3 &scale) : 
+SceneObject("point.dat", position, scale, nullptr)
+{
+    /* ============[Shake]=========== */
+    // banan
+    // 200ml mleka
+    // milkyway
+    // jagody 100g
+    // lyzka masla orzechowego
+
+    /* =========[Naleśniczki]======== */
+    // 4jajka
+    // 180ml mleka
+    // 200g mąki
+    // 1 łyżeczka proszku do pieczenia
+    // 2 łyżki cukru lub miodu
+    // 1 banan
+    // 1/2 łyżeczki cynamonu
+
 
     this->directionVec = {cos(0), sin(0), 0};
     this->animation.goalRotation = 0;
@@ -30,7 +47,11 @@ Drone::Drone(const Vector3 &position, const Vector3 &scale) :
     }
  
     this->Left(0);
-
+    for (auto &rotor : this->rotors)
+    {
+        rotor->Rotate(15*static_cast<int>(rotor->spinDirection), VectorX);
+        rotor->UpdatePoints();
+    }
 }
 
 Drone::~Drone() {}
@@ -39,6 +60,14 @@ void Drone::Forward(const double &length) {
     // std::cout << "KAT: " << this->anglesRPY[2] << std::endl;
     // Vector3 direction = {cos(this->anglesRPY[2] * M_PI / 180), sin(this->anglesRPY[2] * M_PI / 180 ), 0};
     this->animation.SetPositionGoal(this->position + this->directionVec * length);
+    
+    // rotors[1]->Rotate(90, VectorX);
+
+    // rotors[2]->Rotate(90, VectorX);
+
+    // rotors[3]->Rotate(90, VectorY);
+
+    
 }
 void Drone::TookOff(const double &length) {
     this->animation.SetPositionGoal(this->position + VectorZ * length);
@@ -63,6 +92,7 @@ void Drone::Right(const double &angle) {
 
 bool Drone::Translated(){
     auto translateDiff = this->animation.goalPosition - this->position;
+    
     // std::cout << this->position.Length() << "  " << translateDiff.Length() << std::endl;
     if (translateDiff.Length() > this->animation.translateStep.Length()){
         this->Translate(this->animation.translateStep);

@@ -9,8 +9,9 @@
 #include "Route.hpp"
 
 
-class Drone : public Cuboid {
+class Drone : public SceneObject {
   private:
+    
     std::vector<std::shared_ptr<Rotor>> rotors;
     std::vector<std::shared_ptr<Cuboid>> eyes;
     Animation animation;

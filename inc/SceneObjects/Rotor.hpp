@@ -32,12 +32,13 @@ class Rotor : public SceneObject {
      */
     uint8_t spinSpeed;
 
+
+  public:
     /**
      * @brief Direction of spinnig
      */
     const SpinDirection_t spinDirection;
-
-  public:
+    
     /**
      * @brief Construct a new Rotor object
      * @param position local position of Rotor to Drone 
