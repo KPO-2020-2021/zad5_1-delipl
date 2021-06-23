@@ -1,7 +1,7 @@
 /**
  * @file Rotor.hpp
  * @author Delicat Jakub (delicat.kuba@gmail.com)
- * @brief 
+ * @brief File describes Rotor class which is implementted in Drone
  * @version 0.1
  * @date 2021-06-22
  * 
@@ -14,9 +14,9 @@
 #include "SceneObject.hpp"
 
 /**
-     * @brief SpinDirection_t enum which descibes spin direction of Blade
-     * 
-     */
+ * @brief SpinDirection_t enum which descibes spin direction of Blade
+ * 
+ */
 enum class SpinDirection_t : int {
     Clockwise = 1,
     CounterClockwise = -1
@@ -47,13 +47,20 @@ class Rotor : public SceneObject {
     // Rotor(const Vector3 &position,const std::shared_ptr<Transform> & pin, const SpinDirection_t &spinDirection);
     Rotor(const SpinDirection_t &direction, const Vector3 &position = Vector3(), const Vector3 &scale = {1, 1, 1}, Transform *const pin = nullptr);
 
+    /**
+     * @brief Destroy the Rotor object
+     */
     ~Rotor();
+
     /**
      * @brief Spin blades every frame
      */
     void Update() override;
 
-    bool CanLand() override { return true; };
+    /**
+     * @brief Cannot land on 
+     */
+    bool CanLand() override { return false; };
 };
 
 #endif // !ROTOR_HPP

@@ -3,7 +3,7 @@
 Transform::Transform(Transform *const &pin) :
     pinnedTransform{pin} {
     this->position = Vector3();
-    this->localRotation = MatrixRot();
+    this->orientation = MatrixRot();
     this->scale = MatrixRot();
     this->anglesRPY = Vector3();
 }
@@ -26,18 +26,19 @@ void Transform::Rotate(const double &angle, const Vector3 &v)
         this->anglesRPY[1] -= 360;
     if (this->anglesRPY[2] > 360)
         this->anglesRPY[2] -= 360;
+    
 
-    this->localRotation = this->localRotation * MatrixRot(angle, v);
+    this->orientation = this->orientation * MatrixRot(angle, v);
 }
 
 Vector3 Transform::UpdatePoint(Vector3 &point) const {
-    return this->localRotation * this->scale * point + this->position;
+    return this->orientation * this->scale * point + this->position;
 }
 
-Vector3 Transform::ConvertToPinned(Vector3 &point) const {
+Vector3 Transform::ConvertToGlobal(Vector3 &point) const {
     if (this->pinnedTransform != nullptr) {
         point = this->UpdatePoint(point);
-        return this->pinnedTransform->ConvertToPinned(point);
+        return this->pinnedTransform->ConvertToGlobal(point);
     }
     return this->UpdatePoint(point);
 }

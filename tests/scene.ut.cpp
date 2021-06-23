@@ -64,7 +64,7 @@ TEST_CASE("4. Draw by scene") {
 
 // //     scene.AddObject(Object("line.dat"));
 // //     obj = &scene[1];
-// //     obj->localRotation = MatrixRot(90, VectorZ) * obj->localRotation;
+// //     obj->orientation = MatrixRot(90, VectorZ) * obj->orientation;
 // //     if (DISPLAY) {
 // //         scene.Update();
 // //         std::cout << "Press Enter to continue..." << std::endl;
@@ -85,7 +85,7 @@ TEST_CASE("4. Draw by scene") {
 // //         std::cin.ignore(std::numeric_limits<int>().max(), '\n');
 // //     }
 // //     auto lambda = [&obj]() {
-// //         obj->localRotation = MatrixRot(90, VectorZ) * obj->localRotation;
+// //         obj->orientation = MatrixRot(90, VectorZ) * obj->orientation;
 // //     };
 
 // //     CHECK(scene[0][0] == Vector3({100, 0, 0}));

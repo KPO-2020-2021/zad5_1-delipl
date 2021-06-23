@@ -1,3 +1,13 @@
+/**
+ * @file Vector.hpp
+ * @author Delicat Jakub (delicat.kuba@gmail.com)
+ * @brief File describes template class Vector which simulates mathematical vector.
+ * @version 0.1
+ * @date 2021-06-23
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
 #ifndef __VECTOR_HPP__
 #define __VECTOR_HPP__
 #include <initializer_list>
@@ -16,6 +26,16 @@ class Vector {
     */
     std::vector<T> cord;
 
+    /**
+     * @brief How many Vector3 actually are in Scene.
+     */
+    inline static std::size_t HMO = 0;
+
+    /**
+     * @brief How many Vector3 have created are in Scene.
+     */
+    inline static std::size_t allHMO = 0;
+
   public:
     /**
      * @brief Construct a new empty Vector.
@@ -33,6 +53,11 @@ class Vector {
      * Dimention depends how many arguments put.
     */
     Vector(const std::initializer_list<T> &list);
+
+    /**
+     * @brief Destroy the Vector object
+     */
+    ~Vector();
 
     /**
      * @brief Count length of Vector
@@ -127,6 +152,18 @@ class Vector {
      * @brief Dot product 
     */
     T &operator&=(const Vector &v) const;
+
+    /**
+     * @brief How many Vectors are now.
+     * @return std::size_t HMO
+     */
+    inline static std::size_t HowManyObjects() { return HMO; };
+
+    /**
+     * @brief How many Vectors have been created.
+     * @return std::size_t allHMO
+     */
+    inline static std::size_t AllHowManyObjects() { return allHMO; };
 };
 
 /**

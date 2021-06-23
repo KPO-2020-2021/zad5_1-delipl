@@ -1,13 +1,20 @@
+/**
+ * @file Matrix.hpp
+ * @author Delicat Jakub (delicat.kuba@gmail.com)
+ * @brief  File describes template Matrix class
+ * @version 0.1
+ * @date 2021-06-23
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
 #ifndef __MATRIX_H__
 #define __MATRIX_H__
 #include "Vector.hpp"
-/**
- * @file Describing template Matrix class 
- */
 
 /**
  * @brief Matematical dynamic any type Matrix built with table of Vectors which are built with data type.
- * @tparam T Type of values
+ * @tparam T Type of values collected in Vector3
  * @tparam dimN rows Vector<Vector<T,dimM>, dimN>
  * @tparam dimM columns Vector<T, dimM>
  */
@@ -35,7 +42,12 @@ public:
      * @brief Construct a new Matrix object
      * @param M Matrix to copy
      */
-    Matrix(const Matrix &M); 
+    Matrix(const Matrix &M);
+
+    /**
+     * @brief Destroy the Matrix object
+     */
+    ~Matrix();
 
     /**
      * @brief Determinate of square Matrix

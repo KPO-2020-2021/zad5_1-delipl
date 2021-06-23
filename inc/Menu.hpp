@@ -1,11 +1,22 @@
+/**
+ * @file Menu.hpp
+ * @author Delicat Jakub (delicat.kuba@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2021-06-23
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
 #ifndef __MENU_HPP__
 #define __MENU_HPP__
 #include <vector>
 #include <string>
 #include <functional>
 #include <initializer_list>
+
 /**
- * @file Describes Menu class
+ * @brief Menu class for choosing options.
  */
 class Menu{
     public:
@@ -28,16 +39,16 @@ class Menu{
 };
 /**
  * @brief Print options for menu
- * @param cout stream
- * @param menu 
+ * @param cout output stream 
+ * @param menu printed menu
  * @return std::ostream& 
  */
 std::ostream &operator<<(std::ostream &cout, const Menu &menu);
 
 /**
  * @brief Choosing option in Menu and activate function 
- * @param cin stream
- * @param menu 
+ * @param cin input stream
+ * @param menu menu where the option is choosed
  * @return std::istream& 
  */
 std::istream &operator>>(std::istream &cin, const Menu &menu);

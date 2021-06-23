@@ -7,7 +7,7 @@
 //     // CHECK_NOTHROW(Transform trans);
 //     Transform trans;
 //     CHECK(trans.position == Vector3());
-//     CHECK(trans.localRotation == MatrixRot());
+//     CHECK(trans.orientation == MatrixRot());
 //     // CHECK(trans.pinnedTransform == nullptr);
 //     CHECK(trans.scale == MatrixRot());
 // }

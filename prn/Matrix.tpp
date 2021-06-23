@@ -29,6 +29,10 @@ Matrix<T, dimN, dimM>::Matrix(const Matrix &M): Matrix() {
         x = M[++i];
 }
 
+template <typename T, std::size_t dimN, std::size_t dimM>
+Matrix<T, dimN, dimM>::~Matrix() {
+    this->vector.clear();
+}
 
 /* -------------------------------------------------------------------------- */
 /*                                   METHODS                                  */

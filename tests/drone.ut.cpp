@@ -24,7 +24,7 @@ TEST_CASE("6. Drow route"){
         std::cin.ignore(std::numeric_limits<int>().max(), '\n');
         std::cout << "Press Enter to continue..." << std::endl;
         std::cin.ignore(std::numeric_limits<int>().max(), '\n');
-        Scene::Clear();
+        Scene::ClearGNUPlot();
     }
 }
 
@@ -39,7 +39,7 @@ TEST_CASE("2. Print Drone"){
         drone.Draw();
         std::cout << "Press Enter to continue..." << std::endl;
         std::cin.ignore(std::numeric_limits<int>().max(), '\n');
-        Scene::Clear();
+        Scene::ClearGNUPlot();
     }
 }
 
@@ -52,7 +52,7 @@ TEST_CASE("3. Print Drone at point") {
 
         std::cout << "Press Enter to continue..." << std::endl;
         std::cin.ignore(std::numeric_limits<int>().max(), '\n');
-        Scene::Clear();
+        Scene::ClearGNUPlot();
     }
 }
 
@@ -66,7 +66,7 @@ TEST_CASE("4. Move Drone") {
 
         std::cout << "Press Enter to continue..." << std::endl;
         std::cin.ignore(std::numeric_limits<int>().max(), '\n');
-        Scene::Clear();
+        Scene::ClearGNUPlot();
     }
 }
 

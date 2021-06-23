@@ -12,12 +12,18 @@
 template <typename T, std::size_t dim>
 Vector<T, dim>::Vector() {
     this->cord = std::vector<T>(dim, T());
+    ++allHMO;
+    ++HMO;
 }
+
 template <typename T, std::size_t dim>
 Vector<T, dim>::Vector(const Vector &v): Vector() {
     for (std::size_t i = 0; i < dim; ++i)
         this->cord[i] = v[i];
+    ++allHMO;
+    ++HMO;
 }
+
 template <typename T, std::size_t dim>
 Vector<T, dim>::Vector(const std::initializer_list<T> &list): Vector() {
     if(list.size() != dim)
@@ -25,6 +31,14 @@ Vector<T, dim>::Vector(const std::initializer_list<T> &list): Vector() {
     std::size_t i = std::numeric_limits<std::size_t>().max();
     for(const T x: list)
         this->cord[++i] = x;
+    ++allHMO;
+    ++HMO;
+}
+
+template <typename T, std::size_t dim>
+Vector<T, dim>::~Vector(){
+    this->cord.clear();
+    --HMO;
 }
 /* -------------------------------------------------------------------------- */
 /*                                   METHODS                                  */
@@ -157,8 +171,9 @@ template <typename T, std::size_t dim>
 std::istream &operator>>(std::istream &strm, Vector<T, dim> &v) {
     for (std::size_t i = 0; i < dim; ++i){
         strm >> v[i];
-        if(!strm)
+        if(!strm){
             throw(std::logic_error("Vector input error"));
+        }
     }
     return strm;
 }

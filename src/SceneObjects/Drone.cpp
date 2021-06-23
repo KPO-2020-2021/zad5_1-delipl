@@ -27,7 +27,7 @@ SceneObject("point.dat", position, scale, nullptr)
     this->anglesRPY[2] = this->animation.goalOrientation;
     Vector3 rotorScale = scale * 10;
 
-    this->body = std::make_shared<Cuboid>(scale*0.5 + VectorZ*0.5, position, this);
+    this->body = std::make_shared<Cuboid>(scale*0.5 + VectorZ*0.5, Vector3(), this);
     this->route = std::make_shared<Route>(Vector3(), Vector3(), 0, nullptr);
     auto tmpPtr = std::shared_ptr<Rotor>(new Rotor(SpinDirection_t::Clockwise, (*(this->body->vertexes[0])) + VectorZ * this->body->dimentions[2], rotorScale, this));
     this->rotors.push_back(std::move(tmpPtr));
@@ -53,11 +53,8 @@ SceneObject("point.dat", position, scale, nullptr)
  
     this->Left(0);
     this->body->UpdatePoints();
-    // for (auto &rotor : this->rotors)
-    // {
-    //     rotor->Rotate(15*static_cast<int>(rotor->spinDirection), VectorX);
-    //     rotor->UpdatePoints();
-    // }
+    this->animation.SetGoalPosition(this->position);
+    this->animation.SetGoalOrientation(this->anglesRPY[2]);
 }
 
 Drone::~Drone() {}
@@ -75,7 +72,7 @@ void Drone::Forward(const double &length) {
 
     // this->body->Rotate(15, VectorY);
 }
-void Drone::TookOff(const double &length) {
+void Drone::GoVerdical(const double &length) {
     this->animation.SetGoalPosition(this->position + VectorZ * length);
     // rotors[0]->Rotate(0, VectorY);
     // rotors[1]->Rotate(0, VectorX);
@@ -159,14 +156,14 @@ void Drone::FlyTo(const Vector3 &position, const double &height) {
     // this->MakeRoute(position, height);
     this->moves.push([height, this]()
                      {
-                         this->TookOff(height);});
+                         this->GoVerdical(height);});
     
     this->moves.push([angle, this]()
                      { this->Right(angle); });
     this->moves.push([moving, this]()
                      { this->Forward(moving.Length()); });
     this->moves.push([height, this]()
-                     { this->TookOff(-height); });
+                     { this->GoVerdical(-height); });
 }
 
 void Drone::MakeRoute(const double &height, const double &angle, const double &length)

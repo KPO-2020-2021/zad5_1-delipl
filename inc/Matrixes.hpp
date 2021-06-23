@@ -1,10 +1,22 @@
+/**
+ * @file Matrixes.hpp
+ * @author Delicat Jakub (delicat.kuba@gmail.com)
+ * @brief File describes implemetations for template class Matrix.  
+ * Instantiation of template class Matrix like Matrix4x4, Matrix3x3, Matrix2x2 and MatrixRot.
+ * @version 0.1
+ * @date 2021-06-23
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #ifndef __MATRIXROT_H__
 #define __MATRIXROT_H__
 #include "Vectors.hpp"
 #include "Matrix.hpp"
 
 /**
- * @file Instantiation of template class Matrix like Matrix4x4, Matrix3x3, Matrix2x2 and MatrixRot
+ * @file
  */
 
 #ifndef MIN_DIFF
@@ -147,7 +159,5 @@ class MatrixTransform: public Matrix4x4{
      * @param scale Vector3 of scale in every dimention
      */
      MatrixTransform(const Vector3 &translate, const Vector3 &angles, const Vector3 &scale);
-
-
 };
 #endif  // __MATRIXROT_H__

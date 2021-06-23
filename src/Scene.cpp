@@ -7,6 +7,8 @@ Scene::Scene(){
 
 Scene::~Scene(){
     // system("pwd");
+    // for (auto &obj : this->activeObjects)
+    //     obj->~SceneObject();
     system("killall gnuplot  /usr/lib/gnuplot/gnuplot_qt");
 }
 
@@ -51,6 +53,6 @@ void Scene::AddToDrawable(SceneObject const *obj) {
     api.ZmienTrybRys(PzG::TR_3D);
 }
 
-void Scene::Clear() {
+void Scene::ClearGNUPlot() {
     api.UsunWszystkieNazwyPlikow();
 }

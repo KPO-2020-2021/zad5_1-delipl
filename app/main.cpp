@@ -27,6 +27,7 @@ enum Draw{
 
 
 int main() {
+    bool finish = false;
     /* -------------------------------------------------------------------------- */
     /*                              INIT INFORMATIONS                             */
     /* -------------------------------------------------------------------------- */
@@ -52,7 +53,7 @@ int main() {
     /* -------------------------------------------------------------------------- */
 
     Scene scene;
-    std::thread displaying([&scene]() {
+    std::thread displaying([&scene, &finish]() {
         auto start = std::chrono::high_resolution_clock::now();
         while(true){
             auto measure = std::chrono::high_resolution_clock::now();
@@ -66,6 +67,14 @@ int main() {
             }
             catch(Draw){
                 scene.Update();
+                // std::cout << "\n\nCounting Vectors..." << std::endl;
+
+                // std::cout << "===========================================" << std::endl;
+                // std::cout << std::setw(35) << "Number of Vectors on Scene: " << std::setw(10) << Vector3::HowManyObjects() << std::endl;
+                // std::cout << std::setw(35) << "Number of Vectors from start: " << std::setw(10) << Vector3::AllHowManyObjects() << std::endl;
+                // std::cout << "===========================================" << std::endl
+                //           << std::endl
+                //           << std::endl;
             }
         }
     });
@@ -79,7 +88,7 @@ int main() {
     /* -------------------------------------------------------------------------- */
     /*                              MENU CONSTRUCTOR                              */
     /* -------------------------------------------------------------------------- */
-    bool finish = false;
+    
     std::vector<MatrixRot> rotationSequece;
     Menu menu({{"Print informations about selected object: ",
                 [&drone]() mutable
@@ -92,7 +101,7 @@ int main() {
                               << "\neuler anglesRPY: \n"
                               << drone->anglesRPY
                               << "\nrotation Matrix: \n"
-                              << drone->localRotation;
+                              << drone->orientation;
                 }},
                {"Add Drone: ",
                 [&scene]()
@@ -105,8 +114,21 @@ int main() {
                 }},
                {"Choose active drone: ", [&drone, &scene]()
                 {
-                    std::cout << "There are " << scene.CountObjects() << " on scene. Type number. 1 - n" << std::endl;
-                    std::size_t k =1;
+                    // std::cout << "There are " << scene.CountObjects() << " on scene. Type number. 1 - n" << std::endl;
+                    int d = 1;
+                    for (std::size_t i = 0; i < scene.CountObjects(); ++i)
+                    {
+                        auto localPtr = std::dynamic_pointer_cast<Drone>(scene[i]);
+                        if (localPtr != nullptr){
+                            if (localPtr == drone)
+                                std::cout << "* ";
+                            else
+                                std::cout << "  ";
+                            std::cout << d++ << " Drone is on position:  " << localPtr->position << std::endl;
+                        }
+                    }
+                    std::cout << "Type number of Drone" << std::endl;
+                    std::size_t k = 1;
                     std::size_t n = 0;
                     std::cin >> k;
                     for (std::size_t i = 0; i < scene.CountObjects(); ++i)
@@ -131,7 +153,7 @@ int main() {
                     std::cin >> pos;
                     if(pos[0] != 0)
                         drone->moves.push([pos, drone]()
-                                        { drone->TookOff(pos[0] ); });
+                                        { drone->GoVerdical(pos[0] ); });
                     if (pos[1] != 0)
                         drone->moves.push([pos, drone]()
                                           { drone->Right(pos[1]); });
@@ -140,7 +162,7 @@ int main() {
                                           { drone->Forward(pos[2]); });
                     if (pos[0] != 0)
                         drone->moves.push([pos, drone]()
-                                          { drone->TookOff(pos[0] * -1); });
+                                          { drone->GoVerdical(pos[0] * -1); });
 
 
                     drone->MakeRoute(pos[0], pos[1], pos[2]);
@@ -153,24 +175,42 @@ int main() {
                     
                 }}});
 
-    std::shared_ptr<Drone> tmp = std::make_shared<Drone>();
-    scene.Add(std::move(tmp));
+    scene.Add(std::move(std::make_shared<Drone>()));
+    scene.Add(std::move(std::make_shared<Drone>(Vector3({200, -200, 0}))));
     drone = std::dynamic_pointer_cast<Drone>(scene[1]);
+
+
 
     /* -------------------------------------------------------------------------- */
     /*                                  MAIN LOOP                                 */
     /* -------------------------------------------------------------------------- */
     std::thread menuig([&menu, &drone, &finish, &scene]() {
         while (!finish) {
-            std::cout << "=======================" << menu;
+            std::cout << "\n\nCounting Vectors..." << std::endl;
+
+            std::cout << "===========================================" << std::endl;
+            std::cout << std::setw(35) << "Number of Vectors on Scene: " << std::setw(10) << Vector3::HowManyObjects() << std::endl;
+            std::cout << std::setw(35) << "Number of Vectors from start: " << std::setw(10) << Vector3::AllHowManyObjects() << std::endl;
+            std::cout << "===========================================" << std::endl
+                      << std::endl
+                      << std::endl;
+            std::cout << menu;
             try {
+               
+               
+
                 std::cin >> menu;
-                std::cout << "=======================" << std::endl; 
             } catch (std::logic_error &e) {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<int>().max(), '\n');
                 if(std::string(e.what()) == "Exit"){
                     scene.~Scene();
+                    drone.~__shared_ptr();
+                    std::cout << "===========================================" << std::endl;
+                    std::cout << std::setw(35) << "Number of Vectors on Scene: " << std::setw(10) << Vector3::HowManyObjects() << std::endl;
+                    std::cout << std::setw(35) << "Number of Vectors from start: " << std::setw(10) << Vector3::AllHowManyObjects() << std::endl;
+                    std::cout << "===========================================" << std::endl;
+
                     exit(0);
                 }
                 std::cerr << std::endl
@@ -190,6 +230,7 @@ int main() {
 
     displaying.join();
     menuig.join();
+
 
     return 0;
 }

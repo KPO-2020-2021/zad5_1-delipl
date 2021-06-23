@@ -1,7 +1,7 @@
 /**
  * @file Route.hpp
  * @author Delicat Jakub (delicat.kuba@gmail.com)
- * @brief 
+ * @brief File describes Route class for Drone
  * @version 0.1
  * @date 2021-06-22
  * 
@@ -45,10 +45,12 @@ class Route : public SceneObject {
 
     /**
      * @brief Empty Update
-     * 
      */
     void Update() override;
 
+    /**
+     * @brief SceneObjects can land on Route
+     */
     bool CanLand() override;
 };
 

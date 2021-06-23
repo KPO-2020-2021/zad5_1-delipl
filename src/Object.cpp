@@ -18,7 +18,7 @@ Object::Object(const std::string name, const Vector3 &centerPosition,
     this->scale[2][2] = scale[2];
 
     this->position = centerPosition;
-    this->localRotation = MatrixRot();
+    this->orientation = MatrixRot();
 
     std::ifstream readFile(DATA_FOLDER + name);
     if (readFile.good())
@@ -58,7 +58,7 @@ Object::Object(const std::string name, const Vector3 &centerPosition,
 //     this->originPoints = std::vector<Vector3>(obj.CountPoints(), Vector3());
 
 //     this->lenPointsPack = obj.LengthOfPointPack();
-//     this->localRotation = obj.localRotation;
+//     this->orientation = obj.orientation;
 //     this->scale = obj.scale;
 //     this->position = obj.position;
 
@@ -72,6 +72,8 @@ Object::Object(const std::string name, const Vector3 &centerPosition,
 // }
 Object::~Object() {
     system((std::string("rm ") + std::string(TMP_FOLDER) + this->Name()).c_str());
+    this->originPoints.clear();
+    this->actualPoints.clear();
     --Object::HMO;
 }
 
@@ -102,7 +104,7 @@ void Object::UpdatePoints() {
     this->actualPoints = this->originPoints;
 
     for (auto &point : this->actualPoints) {
-        point = this->ConvertToPinned(point);
+        point = this->ConvertToGlobal(point);
     }
 
     this->Save();
@@ -125,6 +127,7 @@ std::istream &operator>>(std::istream &strm, Object &object) {
         try {
             strm >> point;
         } catch (std::logic_error &e) {
+            // point.~Vector3();
             strm.clear();
             return strm;
         }

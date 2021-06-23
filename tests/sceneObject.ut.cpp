@@ -30,13 +30,13 @@ TEST_CASE("3. Rotor pin and local and global positions"){
             cub.UpdatePoints();
             cub.Draw();
             // usleep(10000);
-            Scene::Clear();
+            Scene::ClearGNUPlot();
         }
         std::cout << "Rotate cub" << std::endl;
         std::cout << "Press Enter to continue..." << std::endl;
 
         std::cin.ignore(std::numeric_limits<int>().max(), '\n');
-        Scene::Clear();
+        Scene::ClearGNUPlot();
     }
     // SceneObject drone("cuboid.dat", {0, 0, 50}, {0.2, 0.2, 0.2});
     // Rotor rotor({0, 0, 30}, std::make_shared<Transform>(drone), SpinDirection_t::Clockwise);
