@@ -56,19 +56,6 @@ TEST_CASE("3. Print Drone at point") {
     }
 }
 
-TEST_CASE("4. Move Drone") {
-    Drone drone({30, 50, 65});
-    drone.Translate({-30, -50, -65});
-    drone.Update();
-    CHECK(drone.position == Vector3());
-    if (DISPLAY) {
-        drone.Draw();
-
-        std::cout << "Press Enter to continue..." << std::endl;
-        std::cin.ignore(std::numeric_limits<int>().max(), '\n');
-        Scene::ClearGNUPlot();
-    }
-}
 
 TEST_CASE("4. Drone forward and tookoff") {
     Drone drone;

@@ -11,17 +11,15 @@
 #define PROJECT_VERSION_PATCH 0
 #define PROJECT_VERSION_TWEAK 0
 
-/**
- * @brief Path to data forlder from root of project where *.dat files are placed
- */
 #define DATA_FOLDER "./dat/"
-
-/**
- * @brief Path to temporary forlder from root of project where *.dat files are placed during running program.
- */
 #define TMP_FOLDER "./tmp/"
 
-/**
- * @brief Minimal difference between two double numbers. It might be included.
- */
+
+// Delta time in seconds, to print GnuPlot
+#define dt 0.03
+
+// GnuPlot Windows scale
+#define WINDOW_SCALE 10
+
+// Minimal difference between two double numbers. It might be included
 #define MIN_DIFF 0.0000001

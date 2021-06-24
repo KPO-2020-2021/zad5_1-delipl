@@ -10,7 +10,7 @@
 - Lot zwiadowsczy
 
 ![Przepis na naleśniczki w Dron.cpp](./img/3drones.gif)
-@image html ./img/3drones.gif
+
 ## Budowanie
 
 ``` bash
