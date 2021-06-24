@@ -10,3 +10,5 @@ Cuboid::Cuboid(const Vector3 &dimentions, const Vector3 &position, Transform *co
         this->centers.push_back(&(this->originPoints[i * 4 + 3]));
     }
 }
+
+Cuboid::~Cuboid(){}
