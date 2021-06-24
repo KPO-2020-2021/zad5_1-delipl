@@ -525,7 +525,7 @@ namespace PzG
     }
 
     bool Wynik = Rysuj();
-    if (!PrzeslijDoGNUPlota("\n\n\nset output \nset term x11\n"))
+    if (!PrzeslijDoGNUPlota("\n\n\nset output \nset term x11 1 noraise\n"))
     {
       KomunikatBledu("!!! Wyjscie dla gnuplot'a nie zostalo poprawnie\n"
                      "!!! przestawione na STDOUT.\n");

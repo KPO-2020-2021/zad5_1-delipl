@@ -166,10 +166,12 @@ int main() {
                     drone->moves.push([&drone]()
                                     { drone->GoVerdical(150); });
                     for (int i = 0; i < 30; ++i){
-                        drone->moves.push([ drone]()
-                                          { drone->Right(360/30); });
                         drone->moves.push([drone]()
-                                          { drone->Forward(30); });
+                                          {
+                                              drone->Right(360 / 20);
+                                              drone->Forward(10);
+                                          });
+
                     }
                         drone->moves.push([ drone]()
                                           { drone->GoVerdical(150 * -1); });

@@ -1,4 +1,5 @@
 
+# Zadanie 5 Dron na Tytanie Faza 1
 ## Wykonane zadania
 - Możliwość dodawania wielu dronów
 - Każdy element sceny animuje się jednocześnie
@@ -8,17 +9,9 @@
 - Zmiana koloru aktywnego drona
 - Lot zwiadowsczy
 
-
-
-
-
-## Building
-
-Build by making a build directory (i.e. `build/`), run `cmake` in that dir, and then use `make` to build the desired target.
-
-Requirements: cmake, gnuplot, doxygen + dot
-
-Build commands
+![Przepis na naleśniczki w Dron.cpp](./img/3drones.gif)
+@image html ./img/3drones.gif
+## Budowanie
 
 ``` bash
 git clone https://github.com/KPO-2020-2021/zad5_1-delipl.git # Cloning repository
@@ -32,13 +25,14 @@ cd ../
 mkdir build tmp && cd build
 cmake ..           # options: -DCMAKE_BUILD_TYPE=[Debug | Coverage | Release], Debug is default
 make fulltest      # Makes and runs the tests.
-make coverage      # Generate a coverage report.
-make doc           # Generate html documentation.
+make doc
 
-make app           # Runs main loop
+make app           # build and run
 ```
 
-The `main.cpp` in the folder `tests` is needed. Only there we define `#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN`.
+## Dokumentacja
+Dokumentacja po zbudowaniu znajduje się w build/html/index.html
 
-The main loop of the program is in the `app` folder.
-
+``` bash
+firefox html/index.html
+```

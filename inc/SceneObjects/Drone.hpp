@@ -6,7 +6,6 @@
  * @date 2021-06-24
  * 
  * @copyright Copyright (c) 2021
- * 
  */
 
 #ifndef __DRONE_HPP__
