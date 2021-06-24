@@ -98,5 +98,12 @@ class Scene {
      * @brief ClearGNUPlot all GNUPlot memory. It removes all SceneObjects from GNUPlot but not from Scene.
      */
     static void ClearGNUPlot();
+
+    /**
+     * @brief Select Drone which has index
+     * @param index of drone
+     * @return std::shared_ptr<Drone>& drone
+     */
+    std::shared_ptr<SceneObject> &SelectDrone(const std::size_t &index);
 };
 #endif  // __SCENE_HPP__

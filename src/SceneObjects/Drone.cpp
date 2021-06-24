@@ -29,16 +29,18 @@ SceneObject("point.dat", position, scale, nullptr)
 
     this->body = std::make_shared<Cuboid>(scale*0.5 + VectorZ*0.5, Vector3(), this);
     this->route = std::make_shared<Route>(Vector3(), Vector3(), 0, nullptr);
-    auto tmpPtr = std::shared_ptr<Rotor>(new Rotor(SpinDirection_t::Clockwise, (*(this->body->vertexes[0])) + VectorZ * this->body->dimentions[2], rotorScale, this));
-    this->rotors.push_back(std::move(tmpPtr));
-    tmpPtr = std::shared_ptr<Rotor>(new Rotor(SpinDirection_t::Clockwise, (*(this->body->vertexes[1])) + VectorZ * this->body->dimentions[2], rotorScale, this));
-    this->rotors.push_back(std::move(tmpPtr));
-    tmpPtr = std::shared_ptr<Rotor>(new Rotor(SpinDirection_t::CounterClockwise, (*(this->body->vertexes[6])) + VectorZ * this->body->dimentions[2], rotorScale, this));
-    this->rotors.push_back(std::move(tmpPtr));
-    tmpPtr = std::shared_ptr<Rotor>(new Rotor(SpinDirection_t::CounterClockwise, (*(this->body->vertexes[7])) + VectorZ * this->body->dimentions[2], rotorScale, this));
-    this->rotors.push_back(std::move(tmpPtr));
+    auto tmpPtr1 = std::make_shared<Rotor>(SpinDirection_t::Clockwise, (*(this->body->vertexes[0])) + VectorZ * this->body->dimentions[2], rotorScale, this);
+    this->rotors.push_back(std::move(tmpPtr1));
+    auto tmpPtr2 = std::make_shared<Rotor>(SpinDirection_t::Clockwise, (*(this->body->vertexes[1])) + VectorZ * this->body->dimentions[2], rotorScale, this);
+    this->rotors.push_back(std::move(tmpPtr2));
+    auto tmpPtr3 = std::make_shared<Rotor>(SpinDirection_t::CounterClockwise, (*(this->body->vertexes[6])) + VectorZ * this->body->dimentions[2], rotorScale, this);
+    this->rotors.push_back(std::move(tmpPtr3));
+
+    auto tmpPtr4 = std::make_shared<Rotor>(SpinDirection_t::CounterClockwise, (*(this->body->vertexes[7])) + VectorZ * this->body->dimentions[2], rotorScale, this);
+    this->rotors.push_back(std::move(tmpPtr4));
     
-    
+    // if(tmpPtr1 == nullptr)
+    //     exit(-1);
     if (DISPLAY){
         Scene::AddToDrawable(this->route.get());
         Scene::AddToDrawable(this->body.get());
@@ -192,4 +194,16 @@ void Drone::Update() {
     for (auto &rotor : this->rotors) {
         rotor->Update();
     }
+}
+void Drone::ChangeColor(const int &x){
+    
+    Scene::api.UsunNazwePliku(this->body->Name());
+    PzG::InfoPlikuDoRysowania *wInfoPliku1 = &Scene::api.DodajNazwePliku((std::string(TMP_FOLDER) + this->body->Name()).c_str());
+    wInfoPliku1->ZmienKolor(x);
+    for(auto &rotor: this->rotors){
+        Scene::api.UsunNazwePliku(rotor->Name());
+        wInfoPliku1 = &Scene::api.DodajNazwePliku((std::string(TMP_FOLDER) + rotor->Name()).c_str());
+        wInfoPliku1->ZmienKolor(x);
+    }
+   
 }

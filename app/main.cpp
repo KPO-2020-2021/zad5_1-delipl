@@ -55,7 +55,7 @@ int main() {
     Scene scene;
     std::thread displaying([&scene, &finish]() {
         auto start = std::chrono::high_resolution_clock::now();
-        while(true){
+        while(!finish){
             auto measure = std::chrono::high_resolution_clock::now();
             auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(measure - start);
             try{
@@ -119,7 +119,8 @@ int main() {
                     for (std::size_t i = 0; i < scene.CountObjects(); ++i)
                     {
                         auto localPtr = std::dynamic_pointer_cast<Drone>(scene[i]);
-                        if (localPtr != nullptr){
+                        if (localPtr != nullptr)
+                        {
                             if (localPtr == drone)
                                 std::cout << "* ";
                             else
@@ -129,20 +130,10 @@ int main() {
                     }
                     std::cout << "Type number of Drone" << std::endl;
                     std::size_t k = 1;
-                    std::size_t n = 0;
                     std::cin >> k;
-                    for (std::size_t i = 0; i < scene.CountObjects(); ++i)
-                    {
-                        auto localPtr = std::dynamic_pointer_cast<Drone>(scene[i]);
-                        if (localPtr != nullptr)
-                        {
-                            ++n;
-                            if(n == k)
-                            {
-                                drone = localPtr;
-                            }
-                        }
-                    }
+                    drone->ChangeColor(1);
+                    drone = std::dynamic_pointer_cast<Drone>(scene.SelectDrone(k));
+                    drone->ChangeColor(2);
                 }},
                {"Move drone", [&drone]()
                 {
@@ -167,19 +158,34 @@ int main() {
 
                     drone->MakeRoute(pos[0], pos[1], pos[2]);
                 }},
+               {"Recognize flight", [&drone]()
+                {
+                    if (drone == nullptr)
+                        throw std::logic_error("Did not choosed the active object.");
+                    std::cout << "Type height, angle and length of move." << std::endl;
+                    drone->moves.push([&drone]()
+                                    { drone->GoVerdical(150); });
+                    for (int i = 0; i < 30; ++i){
+                        drone->moves.push([ drone]()
+                                          { drone->Right(360/30); });
+                        drone->moves.push([drone]()
+                                          { drone->Forward(30); });
+                    }
+                        drone->moves.push([ drone]()
+                                          { drone->GoVerdical(150 * -1); });
 
+                    // drone->MakeRoute(pos[0], pos[1], pos[2]);
+                }},
                {"Exit", [&finish, &scene]()
                 {
                     finish = true;
                     throw std::logic_error("Exit");
-                    
                 }}});
 
-    scene.Add(std::move(std::make_shared<Drone>()));
+    scene.Add(std::move(std::make_shared<Drone>(Vector3({200, 200, 0}))));
     scene.Add(std::move(std::make_shared<Drone>(Vector3({200, -200, 0}))));
-    drone = std::dynamic_pointer_cast<Drone>(scene[1]);
-
-
+    drone =  std::dynamic_pointer_cast<Drone>(scene.SelectDrone(1));
+    drone->ChangeColor(2);
 
     /* -------------------------------------------------------------------------- */
     /*                                  MAIN LOOP                                 */
@@ -205,19 +211,16 @@ int main() {
                 std::cin.ignore(std::numeric_limits<int>().max(), '\n');
                 if(std::string(e.what()) == "Exit"){
                     scene.~Scene();
-                    drone.~__shared_ptr();
-                    std::cout << "===========================================" << std::endl;
-                    std::cout << std::setw(35) << "Number of Vectors on Scene: " << std::setw(10) << Vector3::HowManyObjects() << std::endl;
-                    std::cout << std::setw(35) << "Number of Vectors from start: " << std::setw(10) << Vector3::AllHowManyObjects() << std::endl;
-                    std::cout << "===========================================" << std::endl;
 
-                    exit(0);
+                    finish = true;
+                }else{
+                    std::cerr << std::endl
+                              << std::endl
+                              << "!!![ERROR]!!!" << std::endl;
+                    std::cerr << e.what() << std::endl
+                              << std::endl;
                 }
-                std::cerr << std::endl
-                          << std::endl
-                          << "!!![ERROR]!!!" << std::endl;
-                std::cerr << e.what() << std::endl
-                          << std::endl;
+                
                 
             }
             catch (...) {
@@ -226,11 +229,15 @@ int main() {
                 exit(-1);
             }
         }
+        
     });
 
     displaying.join();
     menuig.join();
-
+    std::cout << "===========================================" << std::endl;
+    std::cout << std::setw(35) << "Number of Vectors on Scene: " << std::setw(10) << Vector3::HowManyObjects() << std::endl;
+    std::cout << std::setw(35) << "Number of Vectors from start: " << std::setw(10) << Vector3::AllHowManyObjects() << std::endl;
+    std::cout << "===========================================" << std::endl;
 
     return 0;
 }

@@ -13,7 +13,7 @@
 #define __DRONE_HPP__
 #include <queue>
 #include <functional>
-#include "SceneObject.hpp"
+#include "config.hpp"
 #include "Animation.hpp"
 #include "Rotor.hpp"
 #include "Cuboid.hpp"
@@ -143,5 +143,11 @@ class Drone : public SceneObject {
      * @param length  of Route
      */
     void MakeRoute(const double &height, const double &angle, const double &length);
+
+    /**
+     * @brief Change color of Drone
+     * @param x choosed color
+     */
+    void ChangeColor(const int &x);
 };
 #endif 
