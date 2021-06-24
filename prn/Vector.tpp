@@ -17,7 +17,8 @@ Vector<T, dim>::Vector() {
 }
 
 template <typename T, std::size_t dim>
-Vector<T, dim>::Vector(const Vector &v): Vector() {
+Vector<T, dim>::Vector(const Vector &v){
+    this->cord = std::vector<T>(dim, T());
     for (std::size_t i = 0; i < dim; ++i)
         this->cord[i] = v[i];
     ++allHMO;
@@ -25,7 +26,8 @@ Vector<T, dim>::Vector(const Vector &v): Vector() {
 }
 
 template <typename T, std::size_t dim>
-Vector<T, dim>::Vector(const std::initializer_list<T> &list): Vector() {
+Vector<T, dim>::Vector(const std::initializer_list<T> &list) {
+    this->cord = std::vector<T>(dim, T());
     if(list.size() != dim)
         throw std::out_of_range("To many or less argumets");
     std::size_t i = std::numeric_limits<std::size_t>().max();
