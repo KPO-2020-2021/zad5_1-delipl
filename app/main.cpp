@@ -27,6 +27,7 @@ enum Draw{
 
 
 int main() {
+    {
     bool finish = false;
     /* -------------------------------------------------------------------------- */
     /*                              INIT INFORMATIONS                             */
@@ -236,6 +237,7 @@ int main() {
 
     displaying.join();
     menuig.join();
+}
     std::cout << "===========================================" << std::endl;
     std::cout << std::setw(35) << "Number of Vectors on Scene: " << std::setw(10) << Vector3::HowManyObjects() << std::endl;
     std::cout << std::setw(35) << "Number of Vectors from start: " << std::setw(10) << Vector3::AllHowManyObjects() << std::endl;
