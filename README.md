@@ -20,6 +20,7 @@ cd zad5_1-delipl
 mkdir lib/  # Download doctest lib
 cd lib
 git submodule add https://github.com/onqtam/doctest.git
+git submodule add https://github.com/jothepro/doxygen-awesome-css.git
 cd ../
 
 mkdir build tmp && cd build
